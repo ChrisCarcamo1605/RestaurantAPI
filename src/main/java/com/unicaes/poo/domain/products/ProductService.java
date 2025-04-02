@@ -1,5 +1,8 @@
 package com.unicaes.poo.domain.products;
 
+import com.unicaes.poo.domain.products.dto.DtoProductsList;
+import com.unicaes.poo.domain.products.dto.DtoSaveProduct;
+import com.unicaes.poo.domain.products.dto.DtoUpdateProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProductService {
+public class ProductService implements IProduct {
 
     @Autowired
     private ProductRepository productRepository;
@@ -24,11 +27,11 @@ public class ProductService {
 
     public Product save(DtoSaveProduct dto) {
         Product product = new Product();
-        product.name = dto.name();
+        product.setName(dto.name());
         product.priceCost = dto.priceCost();
         product.priceSell = dto.priceSell();
         product.measurementUnit = dto.measurementUnit();
-        product.description = dto.description();
+        product.setDescription(dto.description());
         product.measurementUnit = dto.measurementUnit();
 
         return productRepository.save(product);
@@ -43,7 +46,7 @@ public class ProductService {
         var product = productRepository.getReferenceById(dto.id());
 
         if (dto.name() != null) {
-            product.name = dto.name();
+            product.setName(dto.name());
         }
         if (dto.priceCost() != null) {
             product.priceCost = dto.priceCost();
@@ -55,7 +58,7 @@ public class ProductService {
             product.measurementUnit = dto.measurementUnit();
         }
         if (dto.description() != null) {
-            product.description = dto.description();
+            product.setDescription(dto.description());
         }
         return productRepository.save(product);
     }

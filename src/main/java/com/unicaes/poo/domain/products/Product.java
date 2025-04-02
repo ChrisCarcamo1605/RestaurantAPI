@@ -17,8 +17,8 @@ public class Product {
     @Column(name = "product_id")
     long id;
 
-    String name;
-    String description;
+    private String name;
+    private String description;
     @Column(name = "price_cost")
     BigDecimal priceCost;
 

@@ -1,4 +1,4 @@
-package com.unicaes.poo.domain.products;
+package com.unicaes.poo.domain.products.dto;
 
 import com.unicaes.poo.domain.measurementUnit.MeasurementUnit;
 import jakarta.validation.constraints.Email;
@@ -17,8 +17,6 @@ public record DtoSaveProduct(
         @NotBlank
         String description,
         @NotNull
-        MeasurementUnit measurementUnit,
-        @Email
-        String email
+        MeasurementUnit measurementUnit
 ) {
 }

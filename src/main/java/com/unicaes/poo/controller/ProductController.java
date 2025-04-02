@@ -2,9 +2,9 @@ package com.unicaes.poo.controller;
 
 
 
-import com.unicaes.poo.domain.products.DtoProductResponse;
-import com.unicaes.poo.domain.products.DtoProductsList;
-import com.unicaes.poo.domain.products.DtoSaveProduct;
+import com.unicaes.poo.domain.products.dto.DtoProductResponse;
+import com.unicaes.poo.domain.products.dto.DtoProductsList;
+import com.unicaes.poo.domain.products.dto.DtoSaveProduct;
 import com.unicaes.poo.domain.products.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +32,9 @@ public class ProductController {
         var response = new DtoProductResponse(product.getId(), product.getName(),
                 product.getPriceCost(), product.getPriceSell(), product.getDescription(), product.getMeasurementUnit());
         URI uri = uriBuilder.path("product").buildAndExpand(product.getId()).toUri();
+
+
+
         return ResponseEntity.created(uri).body(response);
     }
 
@@ -39,6 +42,10 @@ public class ProductController {
     public ResponseEntity<Page<DtoProductsList>> getProductsList(@PageableDefault(size = 3) Pageable pageable) {
         var products = productService.getProductsList(pageable);
 
+        for(var product: products){
+
+            System.out.println(product.name());
+        }
         return ResponseEntity.ok(products);
     }
 }

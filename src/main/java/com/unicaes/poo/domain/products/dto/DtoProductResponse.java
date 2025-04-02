@@ -1,4 +1,4 @@
-package com.unicaes.poo.domain.products;
+package com.unicaes.poo.domain.products.dto;
 
 
 import com.unicaes.poo.domain.measurementUnit.MeasurementUnit;
