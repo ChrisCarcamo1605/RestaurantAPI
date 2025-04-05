@@ -5,13 +5,14 @@ import jakarta.validation.constraints.Email;
 
 import java.math.BigDecimal;
 
-public record DtoUpdateProduct(long id,
-        String  name,
-        BigDecimal priceCost,
-        BigDecimal priceSell,
-        MeasurementUnit measurementUnit,
-        String description,
-        @Email
-        String email
+public record DtoUpdateProduct(
+                                long id,
+                               String name,
+                               BigDecimal priceCost,
+                               BigDecimal priceSell,
+                               MeasurementUnit measurementUnit,
+                               String description,
+                               @Email
+                               String email
 ) {
 }

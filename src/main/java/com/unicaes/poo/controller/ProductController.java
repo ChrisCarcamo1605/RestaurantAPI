@@ -6,6 +6,7 @@ import com.unicaes.poo.domain.products.dto.DtoProductResponse;
 import com.unicaes.poo.domain.products.dto.DtoProductsList;
 import com.unicaes.poo.domain.products.dto.DtoSaveProduct;
 import com.unicaes.poo.domain.products.ProductService;
+import com.unicaes.poo.domain.products.dto.DtoUpdateProduct;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,10 +43,18 @@ public class ProductController {
     public ResponseEntity<Page<DtoProductsList>> getProductsList(@PageableDefault(size = 3) Pageable pageable) {
         var products = productService.getProductsList(pageable);
 
-        for(var product: products){
-
-            System.out.println(product.name());
-        }
+//        for(var product: products){
+//
+//            System.out.println(product.name());
+//        }
         return ResponseEntity.ok(products);
+    }
+
+    @PutMapping
+    public  ResponseEntity<DtoProductsList>  UpdateProduct(@Valid @RequestBody DtoUpdateProduct dto, UriComponentsBuilder uriBuilder) {
+
+        var product =  productService.updateProduct(dto);
+
+        return ResponseEntity.ok().body(new DtoProductsList(product));
     }
 }

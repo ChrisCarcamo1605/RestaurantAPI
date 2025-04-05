@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -44,22 +45,32 @@ public class ProductService implements IProduct {
     public Product updateProduct(DtoUpdateProduct dto) {
 
         var product = productRepository.getReferenceById(dto.id());
+        System.out.println("de dto: " + dto.priceCost());
 
         if (dto.name() != null) {
             product.setName(dto.name());
         }
-        if (dto.priceCost() != null) {
-            product.priceCost = dto.priceCost();
+
+        if (dto.priceCost() != null ) {
+            product.setPriceCost( dto.priceCost());
         }
-        if (dto.priceSell() != null) {
-            product.priceSell = dto.priceSell();
+
+        if (dto.priceSell() != null && dto.priceSell().compareTo(BigDecimal.ZERO) > 0) {
+            product.setPriceSell(dto.priceSell());
         }
+
         if (dto.measurementUnit() != null) {
-            product.measurementUnit = dto.measurementUnit();
+            product.setMeasurementUnit(dto.measurementUnit());
         }
+
         if (dto.description() != null) {
             product.setDescription(dto.description());
         }
-        return productRepository.save(product);
+
+
+        var a = productRepository.save(product);
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaa");
+        System.out.println(a.getId()+ a.getName() + a.getPriceCost() + a.getPriceSell() + a.getMeasurementUnit());
+        return a;
     }
 }
