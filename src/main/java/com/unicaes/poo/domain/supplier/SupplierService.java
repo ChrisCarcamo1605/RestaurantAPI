@@ -3,6 +3,8 @@ package com.unicaes.poo.domain.supplier;
 import com.unicaes.poo.domain.supplier.dto.DtoSupplierList;
 import com.unicaes.poo.domain.supplier.dto.DtoSuppliersResponse;
 import com.unicaes.poo.domain.supplier.dto.DtoUpdateSupplier;
+import com.unicaes.poo.infra.exceptions.QueryException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,16 +44,24 @@ public class SupplierService implements ISupplier {
 
     @Override
     public void deleteSupplier(long id) {
-        var supplier = supplierRepository.getReferenceById(id);
-        supplier.setActive(false);
-        supplierRepository.save(supplier);
+
+        try {
+
+            var supplier = supplierRepository.getReferenceById(id);
+            System.out.println("ronaldo");
+            supplierRepository.save(supplier);
+            supplier.setActive(false);
+        } catch (Exception e) {
+            System.out.println("mesiiii");
+            throw new QueryException("No se encontro el supplier: ");
+        }
     }
 
     @Override
     public DtoSuppliersResponse activeSupplier(Long id) {
         var supplier = supplierRepository.getReferenceById(id);
         supplier.setActive(true);
-       return convertToResponseDto(supplierRepository.save(supplier));
+        return convertToResponseDto(supplierRepository.save(supplier));
     }
 
     @Override

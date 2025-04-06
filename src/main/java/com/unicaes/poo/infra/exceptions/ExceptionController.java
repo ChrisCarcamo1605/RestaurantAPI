@@ -20,29 +20,31 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity handleBadRequest(MethodArgumentNotValidException ex){
+    public ResponseEntity handleBadRequest(MethodArgumentNotValidException ex) {
 
         var errors = ex.getFieldErrors().stream().map(DatosErrores::new);
-        return  ResponseEntity.badRequest().body(errors);
+        return ResponseEntity.badRequest().body(errors);
     }
 
     @ExceptionHandler(QueryException.class)
-    public ResponseEntity queryValidation(QueryException ex){
+    public ResponseEntity queryValidation(QueryException ex) {
 
+        System.out.println("YO SOY ");
         var errorResponse = new DatosErrores(
                 HttpStatus.BAD_REQUEST.value(), "ERROR AL CREAR CONSULTA",
                 ex.getMessage());
 
-return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
 
+    //Pequeño DTO para guardar e imprimir diferentes valores
     public record DatosErrores(
-            Integer codigo,
-            String campo,
-            String error
-    ){
-        public DatosErrores(FieldError error){
+            Integer Code,
+            String Title,
+            String Error
+    ) {
+        public DatosErrores(FieldError error) {
             this(null, error.getField(), error.getDefaultMessage());
         }
     }
