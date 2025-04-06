@@ -33,8 +33,8 @@ public class Consumable {
     private Supplier supplier;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "consumable_type", nullable = false, length = 20)  // Cambiado a singular
-    private ConsumableTypes consumableTypes;  // Cambiado a singular
+    @Column(name = "consumable_type", nullable = false, length = 20)
+    private ConsumableTypes consumableTypes;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "measurement_unit", nullable = false, length = 10)
