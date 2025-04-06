@@ -1,8 +1,8 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.domain.goods.IGood;
-import com.unicaes.poo.domain.goods.dto.*;
-import com.unicaes.poo.domain.goodsTypes.GoodsTypes;
+import com.unicaes.poo.domain.consumables.IConsumable;
+import com.unicaes.poo.domain.consumables.dto.*;
+import com.unicaes.poo.domain.consumableTypes.ConsumableTypes;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,13 +15,13 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/goods")
-public class GoodController {
+@RequestMapping("/api/consumable")
+public class ConsumableController {
 
-    private final IGood goodService;
+    private final IConsumable consumableService;
 
-    public GoodController(IGood goodService) {
-        this.goodService = goodService;
+    public ConsumableController(IConsumable consumableService) {
+        this.consumableService = consumableService;
     }
 
     /**
@@ -31,11 +31,11 @@ public class GoodController {
      * @return Respuesta con el bien creado y cabecera Location
      */
     @PostMapping
-    public ResponseEntity<DtoGoodResponse> createGood(
-            @Valid @RequestBody DtoGoodSave dto,
+    public ResponseEntity<DtoConsumableResponse> createConsuamble(
+            @Valid @RequestBody DtoConsumableSave dto,
             UriComponentsBuilder uriBuilder) {
-        DtoGoodResponse response = goodService.createGood(dto);
-        URI uri = uriBuilder.path("/api/goods/{id}").buildAndExpand(response.goodId()).toUri();
+        DtoConsumableResponse response = consumableService.createConsumable(dto);
+        URI uri = uriBuilder.path("/api/consumables/{id}").buildAndExpand(response.consumableId()).toUri();
         return ResponseEntity.created(uri).body(response);
     }
 
@@ -45,8 +45,8 @@ public class GoodController {
      * @return Detalles completos del bien
      */
     @GetMapping("/{id}")
-    public ResponseEntity<DtoGoodResponse> getGoodById(@PathVariable Long id) {
-        return ResponseEntity.ok(goodService.getGoodById(id));
+    public ResponseEntity<DtoConsumableResponse> getConsumableById(@PathVariable Long id) {
+        return ResponseEntity.ok(consumableService.getConsumableById(id));
     }
 
     /**
@@ -56,10 +56,10 @@ public class GoodController {
      * @return Bien actualizado
      */
     @PutMapping("/{id}")
-    public ResponseEntity<DtoGoodResponse> updateGood(
+    public ResponseEntity<DtoConsumableResponse> updateConsumable(
             @PathVariable Long id,
-            @Valid @RequestBody DtoGoodUpdate dto) {
-        return ResponseEntity.ok(goodService.updateGood(id, dto));
+            @Valid @RequestBody DtoConsumableUpdate dto) {
+        return ResponseEntity.ok(consumableService.updateConsumable(id, dto));
     }
 
     /**
@@ -68,8 +68,8 @@ public class GoodController {
      * @return Bien con estado actualizado
      */
     @PatchMapping("/{id}/status")
-    public ResponseEntity<DtoGoodResponse> toggleGoodStatus(@PathVariable Long id) {
-        return ResponseEntity.ok(goodService.toggleGoodStatus(id));
+    public ResponseEntity<DtoConsumableResponse> toggleConsumableStatus(@PathVariable Long id) {
+        return ResponseEntity.ok(consumableService.toggleConsumableStatus(id));
     }
 
     /**
@@ -78,8 +78,8 @@ public class GoodController {
      * @return Respuesta vacía con código 204 (No Content)
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deactivateGood(@PathVariable Long id) {
-        goodService.deactivateGood(id);
+    public ResponseEntity<Void> deactivateConsumable(@PathVariable Long id) {
+        consumableService.deactivateConsumable(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -89,9 +89,9 @@ public class GoodController {
      * @return Página de bienes con información básica
      */
     @GetMapping
-    public ResponseEntity<Page<DtoGoodList>> getAllGoods(
-            @PageableDefault(size = 10) Pageable pageable) {
-        return ResponseEntity.ok(goodService.getAllGoods(pageable)); // Cambiado de getActiveGoods a getAllGoods
+    public ResponseEntity<Page<DtoConsumableList>> getAllConsumables(
+            @PageableDefault(size = 100) Pageable pageable) {
+        return ResponseEntity.ok(consumableService.getAllConsumable(pageable)); // Cambiado de getActiveGoods a getAllGoods
     }
 
     /**
@@ -101,10 +101,10 @@ public class GoodController {
      * @return Página de bienes del tipo especificado
      */
     @GetMapping("/type/{type}")
-    public ResponseEntity<Page<DtoGoodList>> getGoodsByType(
-            @PathVariable GoodsTypes type,
-            @PageableDefault(size = 10) Pageable pageable) {
-        return ResponseEntity.ok(goodService.getGoodsByType(type, pageable));
+    public ResponseEntity<Page<DtoConsumableList>> getConsumablesByType(
+            @PathVariable ConsumableTypes type,
+            @PageableDefault(size = 100) Pageable pageable) {
+        return ResponseEntity.ok(consumableService.getConsumablesByType(type, pageable));
     }
 
     /**
@@ -113,9 +113,9 @@ public class GoodController {
      * @return Lista de bienes con stock bajo
      */
     @GetMapping("/low-stock")
-    public ResponseEntity<List<DtoGoodResponse>> getLowStockGoods(
+    public ResponseEntity<List<DtoConsumableResponse>> getLowStockGoods(
             @RequestParam(defaultValue = "5.0") Double threshold) {
-        return ResponseEntity.ok(goodService.getLowStockGoods(threshold));
+        return ResponseEntity.ok(consumableService.getLowStockConsumables(threshold));
     }
 
     /**
@@ -125,9 +125,9 @@ public class GoodController {
      * @return Página de bienes que coinciden con la búsqueda
      */
     @GetMapping("/search")
-    public ResponseEntity<Page<DtoGoodList>> searchGoodsByName(
+    public ResponseEntity<Page<DtoConsumableList>> searchConsumablesByName(
             @RequestParam String name,
-            @PageableDefault(size = 10) Pageable pageable) {
-        return ResponseEntity.ok(goodService.searchGoodsByName(name, pageable));
+            @PageableDefault(size = 100) Pageable pageable) {
+        return ResponseEntity.ok(consumableService.searchConsumablesByName(name, pageable));
     }
 }

@@ -1,10 +1,10 @@
-package com.unicaes.poo.domain.goods.dto;
+package com.unicaes.poo.domain.consumables.dto;
 
-import com.unicaes.poo.domain.goodsTypes.GoodsTypes;
+import com.unicaes.poo.domain.consumableTypes.ConsumableTypes;
 import com.unicaes.poo.domain.measurementUnit.MeasurementUnit;
 import jakarta.validation.constraints.*;
 
-public record DtoGoodUpdate(
+public record DtoConsumableUpdate(
         @Size(max = 100, message = "Name must be ≤ 100 characters")
         String name,
 
@@ -16,7 +16,7 @@ public record DtoGoodUpdate(
 
         Long supplierId,
 
-        GoodsTypes goodType,
+        ConsumableTypes consumableTypes,
 
         MeasurementUnit measurementUnit
 ) {}

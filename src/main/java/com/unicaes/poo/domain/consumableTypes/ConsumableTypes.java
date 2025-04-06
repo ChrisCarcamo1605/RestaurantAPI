@@ -1,6 +1,6 @@
-package com.unicaes.poo.domain.goodsTypes;
+package com.unicaes.poo.domain.consumableTypes;
 
-public enum GoodsTypes {
+public enum ConsumableTypes {
     vegetales,      // Frutas y verduras
     carnes,         // Carnes y pescados
     especies,       // Especias y condimentos
