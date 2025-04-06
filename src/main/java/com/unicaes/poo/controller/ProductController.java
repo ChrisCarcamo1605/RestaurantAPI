@@ -1,7 +1,6 @@
 package com.unicaes.poo.controller;
 
 
-
 import com.unicaes.poo.domain.products.dto.DtoProductResponse;
 import com.unicaes.poo.domain.products.dto.DtoProductsList;
 import com.unicaes.poo.domain.products.dto.DtoSaveProduct;
@@ -34,8 +33,6 @@ public class ProductController {
                 product.getPriceCost(), product.getPriceSell(), product.getDescription(), product.getMeasurementUnit());
         URI uri = uriBuilder.path("product").buildAndExpand(product.getId()).toUri();
 
-
-
         return ResponseEntity.created(uri).body(response);
     }
 
@@ -43,18 +40,24 @@ public class ProductController {
     public ResponseEntity<Page<DtoProductsList>> getProductsList(@PageableDefault(size = 3) Pageable pageable) {
         var products = productService.getProductsList(pageable);
 
-//        for(var product: products){
-//
-//            System.out.println(product.name());
-//        }
         return ResponseEntity.ok(products);
     }
 
     @PutMapping
-    public  ResponseEntity<DtoProductsList>  UpdateProduct(@Valid @RequestBody DtoUpdateProduct dto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<DtoProductResponse> UpdateProduct(@Valid @RequestBody DtoUpdateProduct dto, UriComponentsBuilder uriBuilder) {
 
-        var product =  productService.updateProduct(dto);
+        var product = productService.updateProduct(dto);
 
-        return ResponseEntity.ok().body(new DtoProductsList(product));
+        URI uri = uriBuilder.path("product").buildAndExpand(product.getId()).toUri();
+
+        return ResponseEntity.ok().body(new DtoProductResponse(product.getId(),
+                product.getName(), product.getPriceCost(), product.getPriceSell(),
+                product.getDescription(), product.getMeasurementUnit()));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<DtoProductResponse> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.ok().build();
     }
 }

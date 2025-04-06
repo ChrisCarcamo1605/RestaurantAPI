@@ -1,5 +1,6 @@
 package com.unicaes.poo.domain.products;
 
+import com.unicaes.poo.domain.measurementUnit.MeasurementUnit;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,18 +16,18 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
-    long id;
+    private long id;
 
     private String name;
     private String description;
     @Column(name = "price_cost")
-    BigDecimal priceCost;
+    private BigDecimal priceCost;
 
     @Column(name = "price_sell")
-    BigDecimal priceSell;
+    private BigDecimal priceSell;
 
     @Enumerated(EnumType.STRING)
-    com.unicaes.poo.domain.measurementUnit.MeasurementUnit measurementUnit;
+    private MeasurementUnit measurementUnit;
 
-    boolean active = true;
+    private boolean active = true;
 }

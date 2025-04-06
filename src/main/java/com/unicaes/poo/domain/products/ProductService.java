@@ -3,13 +3,13 @@ package com.unicaes.poo.domain.products;
 import com.unicaes.poo.domain.products.dto.DtoProductsList;
 import com.unicaes.poo.domain.products.dto.DtoSaveProduct;
 import com.unicaes.poo.domain.products.dto.DtoUpdateProduct;
+import com.unicaes.poo.infra.exceptions.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 public class ProductService implements IProduct {
@@ -17,25 +17,20 @@ public class ProductService implements IProduct {
     @Autowired
     private ProductRepository productRepository;
 
-    public List<Product> findAll() {
-
-        return productRepository.findAll();
-    }
-
-    public Product findById(long id) {
-        return productRepository.findById(id).get();
-    }
 
     public Product save(DtoSaveProduct dto) {
         Product product = new Product();
         product.setName(dto.name());
-        product.priceCost = dto.priceCost();
-        product.priceSell = dto.priceSell();
-        product.measurementUnit = dto.measurementUnit();
+        product.setPriceCost(dto.priceCost());
+        product.setPriceSell(dto.priceSell());
+        product.setMeasurementUnit(dto.measurementUnit());
         product.setDescription(dto.description());
-        product.measurementUnit = dto.measurementUnit();
 
-        return productRepository.save(product);
+        try {
+            return productRepository.save(product);
+        } catch (Exception e) {
+            throw new QueryException("Producto ya existe");
+        }
     }
 
     public Page<DtoProductsList> getProductsList(Pageable pageable) {
@@ -44,15 +39,20 @@ public class ProductService implements IProduct {
 
     public Product updateProduct(DtoUpdateProduct dto) {
 
+
         var product = productRepository.getReferenceById(dto.id());
-        System.out.println("de dto: " + dto.priceCost());
+
+        if (product == null) {
+            throw new QueryException("El id ingresado no hace referencia a ningún producto");
+        }
+
 
         if (dto.name() != null) {
             product.setName(dto.name());
         }
 
-        if (dto.priceCost() != null ) {
-            product.setPriceCost( dto.priceCost());
+        if (dto.priceCost() != null) {
+            product.setPriceCost(dto.priceCost());
         }
 
         if (dto.priceSell() != null && dto.priceSell().compareTo(BigDecimal.ZERO) > 0) {
@@ -66,11 +66,12 @@ public class ProductService implements IProduct {
         if (dto.description() != null) {
             product.setDescription(dto.description());
         }
+        return productRepository.save(product);
+    }
 
-
-        var a = productRepository.save(product);
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaa");
-        System.out.println(a.getId()+ a.getName() + a.getPriceCost() + a.getPriceSell() + a.getMeasurementUnit());
-        return a;
+    public void deleteProduct(long id) {
+        var product = productRepository.getReferenceById(id);
+        product.setActive(false);
+        productRepository.save(product);
     }
 }
