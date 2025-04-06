@@ -30,4 +30,6 @@ public class Bill {
 
     BigDecimal totalAmount;
 
+    Boolean active;
+
 }
