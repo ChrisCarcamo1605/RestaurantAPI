@@ -23,7 +23,6 @@ public class VentaController {
     @Autowired
     private VentaService ventaService;
 
-    // Crear una nueva venta (POST)
     @PostMapping
     public ResponseEntity<DtoVentaResponse> addVenta(@Valid @RequestBody DtoSaveVenta dto, UriComponentsBuilder uriBuilder) {
 
@@ -35,7 +34,6 @@ public class VentaController {
         return ResponseEntity.created(uri).body(response);
     }
 
-    // Obtener la lista de ventas activas (GET)
     @GetMapping
     public ResponseEntity<Page<DtoVentasList>> getVentasList(@PageableDefault(size = 3) Pageable pageable) {
         var ventas = ventaService.getVentasList(pageable);
@@ -43,7 +41,6 @@ public class VentaController {
         return ResponseEntity.ok(ventas);
     }
 
-    // Actualizar una venta existente (PUT)
     @PutMapping("/{id}")
     public ResponseEntity<DtoVentaResponse> updateVenta(@PathVariable Long id, @Valid @RequestBody DtoUpdateVenta dto) {
 
@@ -52,10 +49,9 @@ public class VentaController {
         return ResponseEntity.ok().body(new DtoVentaResponse(venta.getIdVenta(), venta.getIdTicket()));
     }
 
-    // Eliminar (marcar como inactiva) una venta (DELETE)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteVenta(@PathVariable Long id) {
         ventaService.deleteVenta(id);
-        return ResponseEntity.noContent().build(); // No hay contenido en la respuesta
+        return ResponseEntity.noContent().build();
     }
 }

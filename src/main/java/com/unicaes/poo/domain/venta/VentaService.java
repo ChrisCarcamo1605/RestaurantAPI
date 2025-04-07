@@ -14,7 +14,6 @@ public class VentaService {
     @Autowired
     private VentaRepository ventaRepository;
 
-    // Crear una nueva venta
     public Venta save(DtoSaveVenta dto) {
         Venta venta = new Venta();
         venta.setIdTicket(dto.bill_id());
@@ -22,12 +21,10 @@ public class VentaService {
         return ventaRepository.save(venta);
     }
 
-    // Obtener todas las ventas activas
     public Page<DtoVentasList> getVentasList(Pageable pageable) {
         return ventaRepository.findByActiveTrue(pageable).map(DtoVentasList::new);
     }
 
-    // Actualizar una venta existente
     public Venta updateVenta(Long id, DtoUpdateVenta dto) {
         var venta = ventaRepository.getReferenceById(id);
         if (venta == null) {
@@ -39,7 +36,6 @@ public class VentaService {
         return ventaRepository.save(venta);
     }
 
-    // Eliminar una venta (marcarla como inactiva)
     public void deleteVenta(Long id) {
         var venta = ventaRepository.getReferenceById(id);
         venta.setActive(false);

@@ -18,5 +18,5 @@ public class Venta {
     @Column(name = "bill_id")
     private long idTicket;
 
-    private boolean active = true;  // Si necesitas, puedes agregar más propiedades
+    private boolean active = true;
 }
