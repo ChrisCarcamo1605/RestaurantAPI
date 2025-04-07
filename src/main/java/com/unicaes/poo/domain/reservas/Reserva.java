@@ -1,16 +1,16 @@
 package com.unicaes.poo.domain.reservas;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "reservas")
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Reserva {
 
     @Id
@@ -29,14 +29,8 @@ public class Reserva {
     @Column(name = "monto_reserva")
     private BigDecimal montoReserva;
 
-    private boolean activo = true;
+    private boolean activo;
 
-    public Reserva() {}
 
-    public Reserva(Long mesaId, String cliente, LocalDateTime fechaHora, BigDecimal montoReserva) {
-        this.mesaId = mesaId;
-        this.cliente = cliente;
-        this.fechaHora = fechaHora;
-        this.montoReserva = montoReserva;
-    }
+
 }

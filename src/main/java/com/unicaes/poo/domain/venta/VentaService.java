@@ -1,55 +1,48 @@
 package com.unicaes.poo.domain.venta;
 
-import com.unicaes.poo.domain.venta.dto.DtoVentaResponse;
 import com.unicaes.poo.domain.venta.dto.DtoSaveVenta;
 import com.unicaes.poo.domain.venta.dto.DtoUpdateVenta;
+import com.unicaes.poo.domain.venta.dto.DtoVentasList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class VentaService {
 
-    private final VentaRepository ventaRepository;
+    @Autowired
+    private VentaRepository ventaRepository;
 
-    public VentaService(VentaRepository ventaRepository) {
-        this.ventaRepository = ventaRepository;
-    }
-
-    public DtoVentaResponse saveVenta(DtoSaveVenta dtoSaveVenta) {
+    // Crear una nueva venta
+    public Venta save(DtoSaveVenta dto) {
         Venta venta = new Venta();
-        venta.setCliente(dtoSaveVenta.getCliente());
-        venta.setTotal(dtoSaveVenta.getTotal());
-        venta = ventaRepository.save(venta);
-        return new DtoVentaResponse(venta.getId(), venta.getCliente(), venta.getTotal());
+        venta.setIdTicket(dto.bill_id());
+        venta.setActive(true);
+        return ventaRepository.save(venta);
     }
 
-    public List<DtoVentaResponse> getAllVentas() {
-        List<Venta> ventas = ventaRepository.findAll();
-        return ventas.stream()
-                .map(venta -> new DtoVentaResponse(venta.getId(), venta.getCliente(), venta.getTotal()))
-                .collect(Collectors.toList());
+    // Obtener todas las ventas activas
+    public Page<DtoVentasList> getVentasList(Pageable pageable) {
+        return ventaRepository.findByActiveTrue(pageable).map(DtoVentasList::new);
     }
 
-    public DtoVentaResponse getVentaById(Long id) {
-        Venta venta = ventaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Venta no encontrada"));
-        return new DtoVentaResponse(venta.getId(), venta.getCliente(), venta.getTotal());
+    // Actualizar una venta existente
+    public Venta updateVenta(Long id, DtoUpdateVenta dto) {
+        var venta = ventaRepository.getReferenceById(id);
+        if (venta == null) {
+            throw new RuntimeException("Venta no encontrada");
+        }
+        if (dto.bill_id() != null) {
+            venta.setIdTicket(dto.bill_id());
+        }
+        return ventaRepository.save(venta);
     }
 
-    public DtoVentaResponse updateVenta(Long id, DtoUpdateVenta dtoUpdateVenta) {
-        Venta venta = ventaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Venta no encontrada"));
-        venta.setCliente(dtoUpdateVenta.getCliente());
-        venta.setTotal(dtoUpdateVenta.getTotal());
-        venta = ventaRepository.save(venta);
-        return new DtoVentaResponse(venta.getId(), venta.getCliente(), venta.getTotal());
-    }
-
+    // Eliminar una venta (marcarla como inactiva)
     public void deleteVenta(Long id) {
-        Venta venta = ventaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Venta no encontrada"));
-        ventaRepository.delete(venta);
+        var venta = ventaRepository.getReferenceById(id);
+        venta.setActive(false);
+        ventaRepository.save(venta);
     }
 }
