@@ -23,6 +23,10 @@ public class Product {
     @Column(name = "price_cost")
     private BigDecimal priceCost;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_type")
+    private ProductType productType;
+
     @Column(name = "price_sell")
     private BigDecimal priceSell;
 

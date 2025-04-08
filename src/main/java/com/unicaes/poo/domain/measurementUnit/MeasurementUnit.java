@@ -7,4 +7,5 @@ public enum MeasurementUnit {
     lb,
     gal,
     kg,
+    Unit
 }
