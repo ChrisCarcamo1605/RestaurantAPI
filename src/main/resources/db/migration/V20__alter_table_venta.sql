@@ -1,0 +1,1 @@
+alter table Venta rename venta;
