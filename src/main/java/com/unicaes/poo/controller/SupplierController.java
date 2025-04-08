@@ -18,7 +18,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/supplier")
-public class SupplierController {
+public class SupplierController{
 
     @Autowired
     private SupplierService supplierService;

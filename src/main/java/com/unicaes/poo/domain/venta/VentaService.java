@@ -3,6 +3,7 @@ package com.unicaes.poo.domain.venta;
 import com.unicaes.poo.domain.venta.dto.DtoSaveVenta;
 import com.unicaes.poo.domain.venta.dto.DtoUpdateVenta;
 import com.unicaes.poo.domain.venta.dto.DtoVentasList;
+import com.unicaes.poo.infra.exceptions.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,14 +16,22 @@ public class VentaService {
     private VentaRepository ventaRepository;
 
     public Venta save(DtoSaveVenta dto) {
+
+        try{
         Venta venta = new Venta();
         venta.setIdTicket(dto.bill_id());
         venta.setActive(true);
         return ventaRepository.save(venta);
+        }catch(Exception e){
+            throw new QueryException(e.getMessage());
+        }
     }
 
     public Page<DtoVentasList> getVentasList(Pageable pageable) {
-        return ventaRepository.findByActiveTrue(pageable).map(DtoVentasList::new);
+        try  { return ventaRepository.findByActiveTrue(pageable).map(DtoVentasList::new);  } catch (Exception e) {
+                throw new QueryException(e.getMessage());
+        }
+
     }
 
     public Venta updateVenta(Long id, DtoUpdateVenta dto) {

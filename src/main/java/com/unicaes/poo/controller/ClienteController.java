@@ -11,8 +11,12 @@ import java.util.List;
 @RequestMapping("/clientes")
 public class ClienteController {
 
+
     @Autowired
     private  IClienteService clienteService;
+
+
+
 
 //
 //    public ClienteController(IClienteService clienteService) {
