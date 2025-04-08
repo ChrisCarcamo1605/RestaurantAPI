@@ -18,7 +18,7 @@ public class User {
     long id;
     String username;
     @ManyToOne
-            @JoinColumn(name = "")
+    @JoinColumn(name = "type")
     UserType type;
     String email;
     String password;

@@ -1,16 +1,3 @@
-INSERT INTO users (id, username, email, password, active)
-VALUES (201, 'waiter_one', 'waiter1@restaurant.com', 'waiterpass1', 1),
-       (202, 'waiter_two', 'waiter2@restaurant.com', 'waiterpass2', 1),
-       (203, 'waiter_three', 'waiter3@restaurant.com', 'waiterpass3', 1),
-       (204, 'waiter_four', 'waiter4@restaurant.com', 'waiterpass4', 1),
-       (205, 'other_user1', 'other1@example.com', 'otherpass1', 1),
-       (206, 'other_user2', 'other2@example.com', 'otherpass2', 1),
-       (207, 'other_user3', 'other3@example.com', 'otherpass3', 0),
-       (208, 'other_user4', 'other4@example.com', 'otherpass4', 1),
-       (209, 'other_user5', 'other5@example.com', 'otherpass5', 1),
-       (210, 'other_user6', 'other6@example.com', 'otherpass6', 0);
-
-
 
 INSERT INTO bills (total_amount, customer, emission_Date, done_Date, active, waiter)
 VALUES (150.50, 101, '2025-04-01 10:00:00', '2025-04-01 10:30:00', 1, 201),
