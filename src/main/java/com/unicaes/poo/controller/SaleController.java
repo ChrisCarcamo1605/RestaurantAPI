@@ -7,14 +7,12 @@ import com.unicaes.poo.domain.sale.SaleService;
 import com.unicaes.poo.domain.sale.dto.DtoUpdateSale;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/sale")
@@ -35,8 +33,8 @@ public class SaleController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DtoSaleList>> getSalesList(@PageableDefault(size = 3) Pageable pageable) {
-        var sales = saleService.getSalesList(pageable);
+    public ResponseEntity<List<DtoSaleList>> getSalesList() {
+        var sales = saleService.getSalesList();
         return ResponseEntity.ok(sales);
     }
 
