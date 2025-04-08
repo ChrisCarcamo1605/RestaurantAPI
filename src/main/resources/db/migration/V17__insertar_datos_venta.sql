@@ -1,5 +1,5 @@
 
-INSERT INTO Venta (bill_id, active)
+INSERT INTO Sale (bill_id, active)
 VALUES
     (101, TRUE),
     (102, TRUE),

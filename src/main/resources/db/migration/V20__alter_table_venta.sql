@@ -1,1 +1,1 @@
-alter table Venta rename venta;
+alter table Sale rename sale;
