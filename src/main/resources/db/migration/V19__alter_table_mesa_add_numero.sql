@@ -1,0 +1,1 @@
+alter table mesa add numero varchar(2);

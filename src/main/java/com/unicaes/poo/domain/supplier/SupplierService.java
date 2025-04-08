@@ -25,14 +25,22 @@ public class SupplierService implements ISupplier {
 
     @Override
     public DtoSuppliersResponse createSupplier(DtoSupplierList dto) {
-        Supplier supplier = new Supplier();
-        supplier.setName(dto.name());
-        supplier.setContact(dto.contact());
-        supplier.setAddress(dto.address());
-        supplier.setActive(dto.active());
 
-        Supplier savedSupplier = supplierRepository.save(supplier);
-        return convertToResponseDto(savedSupplier);
+
+        try{
+            Supplier supplier = new Supplier();
+            supplier.setName(dto.name());
+            supplier.setContact(dto.contact());
+            supplier.setAddress(dto.address());
+            supplier.setActive(dto.active());
+
+            Supplier savedSupplier = supplierRepository.save(supplier);
+            return convertToResponseDto(savedSupplier);
+        }
+        catch(Exception e){
+            throw   new QueryException(e.getMessage());
+        }
+
     }
 
     @Override

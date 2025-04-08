@@ -1,4 +1,8 @@
 package com.unicaes.poo.domain.venta.dto;
 
-public record DtoSaveVenta(Long bill_id) {
+import jakarta.validation.constraints.NotNull;
+
+public record DtoSaveVenta(
+        @NotNull
+        Long bill_id) {
 }
