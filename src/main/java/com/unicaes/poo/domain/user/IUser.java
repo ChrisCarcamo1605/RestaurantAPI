@@ -2,6 +2,7 @@ package com.unicaes.poo.domain.user;
 
 import com.unicaes.poo.domain.user.dtos.DtoSaveUser;
 import com.unicaes.poo.domain.user.dtos.DtoUserResponse;
+import com.unicaes.poo.domain.user.dtos.DtoUserUpdate;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface IUser {
 
     List<DtoUserResponse> getUsers();
 
-    DtoUserResponse updateUser(Long id);
+    DtoUserResponse updateUser(DtoUserUpdate dto);
 
     void deleteUser(Long id);
 }

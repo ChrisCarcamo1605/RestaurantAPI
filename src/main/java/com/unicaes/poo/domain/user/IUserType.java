@@ -1,18 +1,20 @@
 package com.unicaes.poo.domain.user;
 
+import com.unicaes.poo.domain.user.dto.DtoUserTypeResponse;
 import com.unicaes.poo.domain.user.dtos.DtoSaveUser;
 import com.unicaes.poo.domain.user.dtos.DtoUserResponse;
+import com.unicaes.poo.domain.user.dtos.DtoUserTypeUpdate;
 
 import java.io.Serializable;
 import java.util.List;
 
 public interface IUserType {
 
-    DtoUserResponse saveType(DtoSaveUser dto);
+    DtoUserTypeResponse saveType(DtoSaveUser dto);
 
-    List<DtoUserResponse> getTypes();
+    List<DtoUserTypeResponse> getTypes();
 
-    DtoUserResponse updateType(Long id);
+    DtoUserTypeResponse updateType(DtoUserTypeUpdate dto);
 
     void deleteType(Long id);
 

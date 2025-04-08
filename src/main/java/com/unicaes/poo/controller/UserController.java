@@ -5,12 +5,14 @@ import com.unicaes.poo.domain.measurementUnit.MeasurementUnit;
 import com.unicaes.poo.domain.user.IUserService;
 import com.unicaes.poo.domain.user.dtos.DtoSaveUser;
 import com.unicaes.poo.domain.user.dtos.DtoUserResponse;
+import com.unicaes.poo.domain.user.dtos.DtoUserUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -28,14 +30,16 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity getUser() {
+    public ResponseEntity<List<DtoUserResponse>> getUser() {
 
-        return ResponseEntity.ok().build();
+        var users = userService.getUsers();
+        return ResponseEntity.ok().body(users);
     }
 
     @PutMapping
-    public ResponseEntity updateUser() {
+    public ResponseEntity<DtoUserResponse> updateUser(@RequestBody DtoUserUpdate dto) {
 
+        var user = userService.updateUser(dto);
         return ResponseEntity.ok().build();
     }
 }

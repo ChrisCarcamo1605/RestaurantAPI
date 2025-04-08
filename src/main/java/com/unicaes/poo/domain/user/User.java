@@ -4,7 +4,7 @@ package com.unicaes.poo.domain.user;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Table(name = "Users")
+@Table(name = "users")
 @Entity(name = "User")
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
@@ -22,5 +22,6 @@ public class User {
     UserType type;
     String email;
     String password;
+    Boolean active;
 
 }

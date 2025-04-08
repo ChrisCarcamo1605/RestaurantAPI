@@ -20,57 +20,84 @@ public class ReservaService implements IReserva {
 
     @Override
     public DtoReservaResponse saveReserva(DtoSaveReserva dtoSaveReserva) {
-        Reserva reserva = new Reserva();
-        reserva.setMesaId(dtoSaveReserva.mesaId());
-        reserva.setCliente(dtoSaveReserva.cliente());
-        reserva.setFechaHora(dtoSaveReserva.fechaHora());
-        reserva.setMontoReserva(dtoSaveReserva.montoReserva());
-        reserva.setActivo(true);
+        try {
+            Reserva reserva = new Reserva();
+            reserva.setMesaId(dtoSaveReserva.mesaId());
+            reserva.setCliente(dtoSaveReserva.cliente());
+            reserva.setFechaHora(dtoSaveReserva.fechaHora());
+            reserva.setMontoReserva(dtoSaveReserva.montoReserva());
+            reserva.setActivo(true);
 
-        reserva = reservaRepository.save(reserva);
-
-        return mapToDto(reserva);
+            return mapToDto(reservaRepository.save(reserva));
+        } catch (Exception e) {
+            throw new QueryException(e.getMessage());
+        }
     }
 
     @Override
     public List<DtoReservaResponse> getAllReservas() {
-        return reservaRepository.findByActivoTrue()
-                .stream()
-                .map(this::mapToDto)
-                .collect(Collectors.toList());
+        try {
+            return reservaRepository.findByActivoTrue()
+                    .stream()
+                    .map(this::mapToDto)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new QueryException(e.getMessage());
+        }
     }
 
     @Override
     public DtoReservaResponse getReservaById(Long id) {
-        Reserva reserva = reservaRepository.findById(id)
-                .orElseThrow(() -> new QueryException("Reserva no encontrada"));
+        try {
+            var reserva = reservaRepository.findById(id)
+                    .orElseThrow(() -> new QueryException("Reserva no encontrada"));
 
-        return mapToDto(reserva);
+            return mapToDto(reserva);
+        } catch (Exception e) {
+            throw new QueryException(e.getMessage());
+        }
     }
 
     @Override
     public DtoReservaResponse updateReserva(Long id, DtoUpdateReserva dtoUpdateReserva) {
-        Reserva reserva = reservaRepository.findById(id)
-                .orElseThrow(() -> new QueryException("Reserva no encontrada"));
+        try {
+            var reserva = reservaRepository.findById(id)
+                    .orElseThrow(() -> new QueryException("Reserva no encontrada"));
 
-        reserva.setMesaId(dtoUpdateReserva.mesaId());
-        reserva.setCliente(dtoUpdateReserva.cliente());
-        reserva.setFechaHora(dtoUpdateReserva.fechaHora());
-        reserva.setMontoReserva(dtoUpdateReserva.montoReserva());
-        reserva.setActivo(true);
+            if (dtoUpdateReserva.mesaId() != null) {
+                reserva.setMesaId(dtoUpdateReserva.mesaId());
+            }
 
-        reserva = reservaRepository.save(reserva);
+            if (dtoUpdateReserva.cliente() != null && !dtoUpdateReserva.cliente().isBlank()) {
+                reserva.setCliente(dtoUpdateReserva.cliente());
+            }
 
-        return mapToDto(reserva);
+            if (dtoUpdateReserva.fechaHora() != null) {
+                reserva.setFechaHora(dtoUpdateReserva.fechaHora());
+            }
+
+            if (dtoUpdateReserva.montoReserva() != null) {
+                reserva.setMontoReserva(dtoUpdateReserva.montoReserva());
+            }
+
+            reserva.setActivo(true);
+            return mapToDto(reservaRepository.save(reserva));
+        } catch (Exception e) {
+            throw new QueryException(e.getMessage());
+        }
     }
 
     @Override
     public void deleteReserva(Long id) {
-        Reserva reserva = reservaRepository.findById(id)
-                .orElseThrow(() -> new QueryException("Reserva no encontrada"));
+        try {
+            var reserva = reservaRepository.findById(id)
+                    .orElseThrow(() -> new QueryException("Reserva no encontrada"));
 
-        reserva.setActivo(false);
-        reservaRepository.save(reserva);
+            reserva.setActivo(false);
+            reservaRepository.save(reserva);
+        } catch (Exception e) {
+            throw new QueryException(e.getMessage());
+        }
     }
 
     private DtoReservaResponse mapToDto(Reserva reserva) {
