@@ -1,9 +1,7 @@
 package com.unicaes.poo.domain.bill;
 
-import com.unicaes.poo.domain.measurementUnit.MeasurementUnit;
 import com.unicaes.poo.domain.products.Product;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,21 +11,30 @@ import java.math.BigDecimal;
 @Entity(name = "BillDetails")
 @Getter
 @Setter
-@EqualsAndHashCode(of = "billDetailsId")
 public class BillDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "details_id")
-    long billDetailsId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "Product_id")
-    Product product;
+    @JoinColumn(name = "bill_id", nullable = false)
+    private Bill bill;
 
-    int quantity;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
-    BigDecimal total;
+    @Column(nullable = false)
+    private Integer quantity;
 
-    Boolean active;
+    @Column(name = "unit_price", precision = 10, scale = 2, nullable = false)
+    private BigDecimal unitPrice;
 
+    @Column(precision = 10, scale = 2, nullable = false)
+    private BigDecimal total;
+
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean active = true;
 }
