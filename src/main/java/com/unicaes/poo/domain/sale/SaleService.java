@@ -5,9 +5,10 @@ import com.unicaes.poo.domain.sale.dto.DtoUpdateSale;
 import com.unicaes.poo.domain.sale.dto.DtoSaleList;
 import com.unicaes.poo.infra.exceptions.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SaleService {
@@ -27,10 +28,12 @@ public class SaleService {
         }
     }
 
-    public Page<DtoSaleList> getSalesList(Pageable pageable) {
+    public List<DtoSaleList> getSalesList() {
         try {
-            return saleRepository.findByActiveTrue(pageable)
-                    .map(DtoSaleList::new);
+            return saleRepository.findByActiveTrue()
+                    .stream()
+                    .map(DtoSaleList::new)
+                    .collect(Collectors.toList());
         } catch (Exception e) {
             throw new QueryException("Error al obtener la lista de ventas: " + e.getMessage());
         }
