@@ -17,6 +17,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     String username;
+    @ManyToOne
+            @JoinColumn(name = "")
+    UserType type;
     String email;
     String password;
 

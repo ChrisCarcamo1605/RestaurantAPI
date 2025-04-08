@@ -1,24 +1,40 @@
 package com.unicaes.poo.controller;
 
 
+import com.unicaes.poo.domain.measurementUnit.MeasurementUnit;
+import com.unicaes.poo.domain.user.IUserService;
+import com.unicaes.poo.domain.user.dtos.DtoSaveUser;
+import com.unicaes.poo.domain.user.dtos.DtoUserResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
+    IUserService userService;
+
+    @PostMapping
+    public ResponseEntity<DtoUserResponse> addUser(@RequestBody DtoSaveUser dto, UriComponentsBuilder ucBuilder) {
+
+        var user = userService.saveUser(dto);
+        URI uri = ucBuilder.path("/user").buildAndExpand(user.id()).toUri();
+        return ResponseEntity.created(uri).body(user);
+    }
+
     @GetMapping
-    public ResponseEntity getUser(){
+    public ResponseEntity getUser() {
 
         return ResponseEntity.ok().build();
     }
 
     @PutMapping
-    public ResponseEntity updateUser(){
+    public ResponseEntity updateUser() {
 
         return ResponseEntity.ok().build();
     }

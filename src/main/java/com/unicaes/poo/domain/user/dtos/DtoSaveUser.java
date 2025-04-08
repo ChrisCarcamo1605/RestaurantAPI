@@ -1,4 +1,4 @@
-package com.unicaes.poo.domain.user;
+package com.unicaes.poo.domain.user.dtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
