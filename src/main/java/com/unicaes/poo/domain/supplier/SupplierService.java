@@ -5,13 +5,11 @@ import com.unicaes.poo.domain.supplier.dto.DtoSuppliersResponse;
 import com.unicaes.poo.domain.supplier.dto.DtoUpdateSupplier;
 import com.unicaes.poo.infra.exceptions.QueryException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class SupplierService implements ISupplier {
@@ -25,91 +23,86 @@ public class SupplierService implements ISupplier {
 
     @Override
     public DtoSuppliersResponse createSupplier(DtoSupplierList dto) {
-
-
-        try{
+        try {
             Supplier supplier = new Supplier();
             supplier.setName(dto.name());
             supplier.setContact(dto.contact());
             supplier.setAddress(dto.address());
-            supplier.setActive(dto.active());
+            supplier.setActive(true); // Siempre activo al crear
 
             Supplier savedSupplier = supplierRepository.save(supplier);
             return convertToResponseDto(savedSupplier);
+        } catch (Exception e) {
+            throw new QueryException("Error creating supplier: " + e.getMessage());
         }
-        catch(Exception e){
-            throw   new QueryException(e.getMessage());
-        }
-
     }
 
     @Override
     public DtoSuppliersResponse getSupplierById(Long id) {
-        Supplier supplier = supplierRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Supplier not found with id: " + id));
-        return convertToResponseDto(supplier);
-    }
-
-    @Override
-    public void deleteSupplier(long id) {
-
         try {
-
-            var supplier = supplierRepository.getReferenceById(id);
-            System.out.println("ronaldo");
-            supplierRepository.save(supplier);
-            supplier.setActive(false);
+            Supplier supplier = supplierRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Supplier not found with id: " + id));
+            return convertToResponseDto(supplier);
+        } catch (EntityNotFoundException e) {
+            throw e;
         } catch (Exception e) {
-            System.out.println("mesiiii");
-            throw new QueryException("No se encontro el supplier: ");
+            throw new QueryException("Error getting supplier: " + e.getMessage());
         }
     }
 
     @Override
-    public DtoSuppliersResponse activeSupplier(Long id) {
-        var supplier = supplierRepository.getReferenceById(id);
-        supplier.setActive(true);
-        return convertToResponseDto(supplierRepository.save(supplier));
+    public void deactivateSupplier(long id) {
+        try {
+            Supplier supplier = supplierRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Supplier not found with id: " + id));
+
+            if (!supplier.isActive()) {
+                throw new ValidationException("Supplier is already deactivated");
+            }
+
+            supplier.setActive(false);
+            supplierRepository.save(supplier);
+        } catch (EntityNotFoundException | ValidationException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new QueryException("Error deactivating supplier: " + e.getMessage());
+        }
     }
 
     @Override
     public Page<DtoSupplierList> getSuppliersPage(Pageable pageable) {
-        return supplierRepository.findAll(pageable)
-                .map(this::convertToListDto);
+        try {
+            return supplierRepository.findAll(pageable)
+                    .map(this::convertToListDto);
+        } catch (Exception e) {
+            throw new QueryException("Error getting suppliers list: " + e.getMessage());
+        }
     }
 
     @Override
-    public DtoSuppliersResponse deleteSupplier(Long id, DtoUpdateSupplier dto) throws RuntimeException {
+    public DtoSuppliersResponse updateSupplier(Long id, DtoUpdateSupplier dto) {
+        try {
+            Supplier supplier = supplierRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Supplier not found with id: " + id));
 
-        Supplier supplier = supplierRepository.getReferenceById(id);
+            // Actualización parcial - solo campos no nulos
+            if (dto.name() != null && !dto.name().isBlank()) {
+                supplier.setName(dto.name());
+            }
+            if (dto.contact() != null && !dto.contact().isBlank()) {
+                supplier.setContact(dto.contact());
+            }
+            if (dto.address() != null && !dto.address().isBlank()) {
+                supplier.setAddress(dto.address());
+            }
 
-        supplier.setName(dto.name());
-
-        if (dto.contact() != null) supplier.setContact(dto.contact());
-
-        if (dto.contact() != null) {
-            supplier.setAddress(dto.address());
+            Supplier updatedSupplier = supplierRepository.save(supplier);
+            return convertToResponseDto(updatedSupplier);
+        } catch (EntityNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new QueryException("Error updating supplier: " + e.getMessage());
         }
-
-        if (dto.address() != null) {
-            supplier.setAddress(dto.address());
-        }
-        System.out.println("Depurando pa " + supplier.getName());
-
-        Supplier updatedSupplier = supplierRepository.save(supplier);
-        return convertToResponseDto(updatedSupplier);
-    }
-
-    @Override
-    public DtoSuppliersResponse toggleSupplierStatus(Long id) {
-        Supplier supplier = supplierRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Proveedor no encontrado con ID: " + id));
-
-        // Cambia el estado (true->false o false->true)
-        supplier.setActive(!supplier.isActive());
-
-        Supplier toggledSupplier = supplierRepository.save(supplier);
-        return convertToResponseDto(toggledSupplier);
     }
 
     private DtoSuppliersResponse convertToResponseDto(Supplier supplier) {

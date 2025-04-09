@@ -14,10 +14,10 @@ public class Supplier {
     @Column(name = "supplier_id")
     private Long supplierId;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 20)
     private String name;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 50)
     private String contact;
 
     @Column(nullable = false, length = 200)
