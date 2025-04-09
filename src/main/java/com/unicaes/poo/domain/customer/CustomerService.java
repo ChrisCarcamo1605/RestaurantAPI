@@ -1,6 +1,7 @@
 package com.unicaes.poo.domain.customer;
 
 import com.unicaes.poo.domain.customer.dto.*;
+import com.unicaes.poo.infra.exceptions.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,37 +16,58 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public List<DtoCustomerList> findAll() {
-
-        System.out.println("dentro del get pa");
-        return clienteRepository.findAll()
-                .stream()
-                .map(DtoCustomerList::fromEntity)
-                .collect(Collectors.toList());
+        try {
+            return clienteRepository.findAll()
+                    .stream()
+                    .map(DtoCustomerList::fromEntity)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new QueryException("Error al obtener la lista de clientes: " + e.getMessage());
+        }
     }
 
     @Override
     public DtoCustomerResponse findById(Long id) {
-        Customer cliente = clienteRepository.findById(id).orElseThrow();
-        return DtoCustomerResponse.fromEntity(cliente);
+        try {
+            Customer cliente = clienteRepository.findById(id)
+                    .orElseThrow(() -> new QueryException("Cliente no encontrado con id: " + id));
+            return DtoCustomerResponse.fromEntity(cliente);
+        } catch (Exception e) {
+            throw new QueryException("Error al buscar cliente por id: " + e.getMessage());
+        }
     }
+
 
     @Override
     public DtoCustomerResponse save(DtoCustomerSave dto) {
-        Customer cliente = dto.toEntity();
-        var a = clienteRepository.save(cliente);
-        System.out.println("dentro del save");
-        return DtoCustomerResponse.fromEntity(a);
+        try {
+            Customer cliente = dto.toEntity();
+            return DtoCustomerResponse.fromEntity(clienteRepository.save(cliente));
+        } catch (Exception e) {
+            throw new QueryException("Error al guardar cliente: " + e.getMessage());
+        }
     }
+
 
     @Override
     public DtoCustomerResponse update(Long id, DtoCustomerUpdate dto) {
-        Customer cliente = clienteRepository.findById(id).orElseThrow();
-        dto.updateEntity(cliente);
-        return DtoCustomerResponse.fromEntity(clienteRepository.save(cliente));
+        try {
+            Customer cliente = clienteRepository.findById(id)
+                    .orElseThrow(() -> new QueryException("Cliente no encontrado con id: " + id));
+            dto.updateEntity(cliente);
+            return DtoCustomerResponse.fromEntity(clienteRepository.save(cliente));
+        } catch (Exception e) {
+            throw new QueryException("Error al actualizar cliente: " + e.getMessage());
+        }
     }
+
 
     @Override
     public void delete(Long id) {
-        clienteRepository.deleteById(id);
+        try {
+            clienteRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new QueryException("Error al eliminar cliente: " + e.getMessage());
+        }
     }
 }

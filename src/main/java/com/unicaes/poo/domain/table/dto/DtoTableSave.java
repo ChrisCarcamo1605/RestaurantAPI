@@ -1,8 +1,18 @@
 package com.unicaes.poo.domain.table.dto;
 
 import com.unicaes.poo.domain.table.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-public record DtoTableSave(String numero, int capacidad) {
+public record DtoTableSave(
+        @NotBlank
+        String numero,
+        @NotNull
+        Integer capacidad) {
+
+
+
+
     public Table toEntity() {
         Table mesa = new Table();
         mesa.setNumber(numero);
