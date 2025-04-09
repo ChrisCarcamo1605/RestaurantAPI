@@ -107,6 +107,7 @@ public class ConsumableService implements IConsumable {
 
     private DtoConsumableList convertToListDto(Consumable consumable) {
         return new DtoConsumableList(
+                consumable.getId(),
                 consumable.getName(),
                 consumable.getPrice().doubleValue(),
                 consumable.getStock(),

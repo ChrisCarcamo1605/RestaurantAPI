@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class IngredientService implements IIngridient {
+public class IngredientService implements IIngredient {
 
     private final IngredientRepository ingredientRepository;
     private final ConsumableRepository consumableRepository;
@@ -26,13 +26,13 @@ public class IngredientService implements IIngridient {
     @Transactional
     public DtoIngredientResponse saveIngredient(DtoIngredientSave dto) {
         Consumable consumable = consumableRepository.findById(dto.consumableId())
-                .orElseThrow(() -> new NotFoundException("Consumible no encontrado con ID: " + dto.consumableId()));
+                .orElseThrow(() -> new QueryException("Consumible no encontrado con ID: " + dto.consumableId()));
 
         Product product = productRepository.findById(dto.productId())
-                .orElseThrow(() -> new NotFoundException("Producto no encontrado con ID: " + dto.productId()));
+                .orElseThrow(() -> new QueryException("Producto no encontrado con ID: " + dto.productId()));
 
         if (dto.quantity() <= 0) {
-            throw new ValidationException("La cantidad debe ser mayor que cero");
+            throw new QueryException("La cantidad debe ser mayor que cero");
         }
 
         try {
@@ -62,25 +62,25 @@ public class IngredientService implements IIngridient {
     @Transactional
     public DtoIngredientResponse updateIngredient(Long id, DtoIngredientUpdate dto) {
         Ingredient ingredient = ingredientRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Ingrediente no encontrado con ID: " + id));
+                .orElseThrow(() -> new QueryException("Ingrediente no encontrado con ID: " + id));
 
         try {
             if (dto.consumableId() != null) {
                 Consumable consumable = consumableRepository.findById(dto.consumableId())
-                        .orElseThrow(() -> new NotFoundException("Consumible no encontrado con ID: " + dto.consumableId()));
+                        .orElseThrow(() -> new QueryException("Consumible no encontrado con ID: " + dto.consumableId()));
                 ingredient.setConsumable(consumable);
             }
 
             if (dto.quantity() != null) {
                 if (dto.quantity() <= 0) {
-                    throw new ValidationException("La cantidad debe ser mayor que cero");
+                    throw new QueryException("La cantidad debe ser mayor que cero");
                 }
                 ingredient.setQuantity(dto.quantity());
             }
 
             if (dto.productId() != null) {
                 Product product = productRepository.findById(dto.productId())
-                        .orElseThrow(() -> new NotFoundException("Producto no encontrado con ID: " + dto.productId()));
+                        .orElseThrow(() -> new QueryException("Producto no encontrado con ID: " + dto.productId()));
                 ingredient.setProduct(product);
             }
 
@@ -95,7 +95,7 @@ public class IngredientService implements IIngridient {
     @Transactional
     public void deleteIngredient(Long id) {
         if (!ingredientRepository.existsById(id)) {
-            throw new NotFoundException("Ingrediente no encontrado con ID: " + id);
+            throw new QueryException("Ingrediente no encontrado con ID: " + id);
         }
 
         try {

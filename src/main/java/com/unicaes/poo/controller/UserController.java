@@ -6,6 +6,7 @@ import com.unicaes.poo.domain.user.IUserService;
 import com.unicaes.poo.domain.user.dtos.DtoSaveUser;
 import com.unicaes.poo.domain.user.dtos.DtoUserResponse;
 import com.unicaes.poo.domain.user.dtos.DtoUserUpdate;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class UserController {
     IUserService userService;
 
     @PostMapping
-    public ResponseEntity<DtoUserResponse> addUser(@RequestBody DtoSaveUser dto, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<DtoUserResponse> addUser(  @RequestBody @Valid DtoSaveUser dto, UriComponentsBuilder ucBuilder) {
 
         var user = userService.saveUser(dto);
         URI uri = ucBuilder.path("/user").buildAndExpand(user.id()).toUri();
@@ -37,9 +38,15 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<DtoUserResponse> updateUser(@RequestBody DtoUserUpdate dto) {
+    public ResponseEntity<DtoUserResponse> updateUser(@Valid @RequestBody DtoUserUpdate dto) {
 
         var user = userService.updateUser(dto);
         return ResponseEntity.accepted().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }

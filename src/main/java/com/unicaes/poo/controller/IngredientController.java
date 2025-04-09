@@ -1,24 +1,37 @@
 package com.unicaes.poo.controller;
 
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
+import com.unicaes.poo.domain.ingridient.IngredientService;
 import com.unicaes.poo.domain.ingridient.dto.*;
-import com.unicaes.poo.domain.ingridient.IIngridient;
+import com.unicaes.poo.domain.ingridient.IIngredient;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/ingredients")
 @RequiredArgsConstructor
 public class IngredientController {
 
-    private final IIngridient ingredientService;
+
+    @Autowired
+    private IIngredient ingredientService;
 
     @PostMapping
-    public ResponseEntity<DtoIngredientResponse> createIngredient(@RequestBody DtoIngredientSave dto) {
+    public ResponseEntity<DtoIngredientResponse> createIngredient(@RequestBody @Valid DtoIngredientSave dto, UriComponentsBuilder ucBuilder) {
+
+
         DtoIngredientResponse response = ingredientService.saveIngredient(dto);
-        return ResponseEntity.ok(response);
+
+        URI uri = ucBuilder.path("/ingredients/{id}").buildAndExpand(response.ingredientId()).toUri();
+        return ResponseEntity.created(uri).body(response);
     }
 
     @GetMapping
@@ -30,6 +43,7 @@ public class IngredientController {
     @PatchMapping("/{id}")
     public ResponseEntity<DtoIngredientResponse> updateIngredient(
             @PathVariable Long id,
+            @Valid
             @RequestBody DtoIngredientUpdate dto) {
         DtoIngredientResponse response = ingredientService.updateIngredient(id, dto);
         return ResponseEntity.accepted().body(response);

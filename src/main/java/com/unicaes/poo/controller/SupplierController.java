@@ -2,6 +2,7 @@ package com.unicaes.poo.controller;
 
 import com.unicaes.poo.domain.supplier.SupplierService;
 import com.unicaes.poo.domain.supplier.dto.DtoSupplierList;
+import com.unicaes.poo.domain.supplier.dto.DtoSupplierSave;
 import com.unicaes.poo.domain.supplier.dto.DtoSuppliersResponse;
 import com.unicaes.poo.domain.supplier.dto.DtoUpdateSupplier;
 import jakarta.validation.Valid;
@@ -28,7 +29,7 @@ public class SupplierController {
 
     @PostMapping
     public ResponseEntity<DtoSuppliersResponse> createSupplier(
-            @Valid @RequestBody DtoSupplierList dto,
+            @Valid @RequestBody DtoSupplierSave dto,
             UriComponentsBuilder uriBuilder) {
         DtoSuppliersResponse response = supplierService.createSupplier(dto);
 
@@ -41,7 +42,7 @@ public class SupplierController {
 
     @GetMapping
     public ResponseEntity<Page<DtoSupplierList>> getAllSuppliers(
-            @PageableDefault(size = 10) Pageable pageable) {
+            @PageableDefault(size = 5) Pageable pageable) {
         Page<DtoSupplierList> suppliers = supplierService.getSuppliersPage(pageable);
         return ResponseEntity.ok(suppliers);
     }
@@ -52,7 +53,7 @@ public class SupplierController {
         return ResponseEntity.ok(supplier);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<DtoSuppliersResponse> updateSupplier(
             @PathVariable Long id,
             @Valid @RequestBody DtoUpdateSupplier dto) {

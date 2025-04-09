@@ -4,6 +4,7 @@ import com.unicaes.poo.domain.consumableTypes.ConsumableTypes;
 import com.unicaes.poo.domain.measurementUnit.MeasurementUnit;
 
 public record DtoConsumableList(
+        Long consumableId,
         String name,
         Double price,
         Double stock,

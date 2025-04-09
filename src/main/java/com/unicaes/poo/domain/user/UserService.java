@@ -1,7 +1,7 @@
 package com.unicaes.poo.domain.user;
 
-import com.unicaes.poo.domain.products.dto.DtoTypeResponse;
-import com.unicaes.poo.domain.user.dto.DtoUserTypeResponse;
+import com.unicaes.poo.domain.products.dto.DtoSaveType;
+import com.unicaes.poo.domain.user.dtos.DtoUserTypeResponse;
 import com.unicaes.poo.domain.user.dtos.DtoSaveUser;
 import com.unicaes.poo.domain.user.dtos.DtoUserResponse;
 import com.unicaes.poo.domain.user.dtos.DtoUserTypeUpdate;
@@ -24,15 +24,18 @@ public class UserService implements IUserService {
 
     @Override
     public DtoUserResponse saveUser(DtoSaveUser dto) {
-        var type = userTypeRepository.getReferenceById(dto.type());
+
         try {
+            var type = userTypeRepository.getReferenceById(dto.type());
             var user = new User();
             user.setUsername(dto.username());
             user.setType(type);
             user.setPassword(dto.password());
             user.setEmail(dto.email());
-            return new DtoUserResponse(userRepository.save(user));
-        } catch (QueryException e) {
+            var response = userRepository.save(user);
+            System.out.println("hasta llegamo");
+            return new DtoUserResponse(response);
+        } catch (Exception e) {
             throw new QueryException(e.getMessage());
         }
     }
@@ -44,10 +47,9 @@ public class UserService implements IUserService {
 
     @Override
     public DtoUserResponse updateUser(DtoUserUpdate dto) {
-
-        var type = userTypeRepository.getReferenceById(dto.type());
-
         try {
+
+            var type = userTypeRepository.getReferenceById(dto.type());
             var user = userRepository.getReferenceById(dto.id());
 
             if (dto.username() != null) {
@@ -64,7 +66,7 @@ public class UserService implements IUserService {
             }
             return new DtoUserResponse(userRepository.save(user));
 
-        } catch (QueryException e) {
+        } catch (Exception e) {
             throw new QueryException(e.getMessage());
         }
 
@@ -78,7 +80,7 @@ public class UserService implements IUserService {
             user.setActive(false);
             userRepository.save(user);
 
-        } catch (QueryException e) {
+        } catch (Exception e) {
             throw new QueryException(e.getMessage());
         }
 
@@ -86,12 +88,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public DtoUserTypeResponse saveType(DtoSaveUser dto) {
+    public DtoUserTypeResponse saveType(DtoSaveType dto) {
         try {
             var type = new UserType();
-            type.setName(dto.username());
+            type.setName(dto.name());
             return new DtoUserTypeResponse(userTypeRepository.save(type));
-        } catch (QueryException e) {
+        } catch (Exception e) {
             throw new QueryException(e.getMessage());
         }
     }
@@ -100,7 +102,7 @@ public class UserService implements IUserService {
     public List<DtoUserTypeResponse> getTypes() {
         try {
             return userTypeRepository.findAll().stream().map(DtoUserTypeResponse::new).collect(Collectors.toList());
-        } catch (QueryException e) {
+        } catch (Exception e) {
             throw new QueryException(e.getMessage());
         }
 
@@ -112,7 +114,7 @@ public class UserService implements IUserService {
             var type = userTypeRepository.getReferenceById(dto.id());
             type.setName(dto.name());
             return new DtoUserTypeResponse(userTypeRepository.save(type));
-        } catch (QueryException e) {
+        } catch (Exception e) {
             throw new QueryException(e.getMessage());
         }
     }
@@ -124,7 +126,7 @@ public class UserService implements IUserService {
         try {
             var type = userTypeRepository.getReferenceById(id);
             userTypeRepository.delete(type);
-        } catch (QueryException e) {
+        } catch (Exception e) {
             throw new QueryException(e.getMessage());
         }
 

@@ -1,6 +1,7 @@
 package com.unicaes.poo.domain.supplier;
 
 import com.unicaes.poo.domain.supplier.dto.DtoSupplierList;
+import com.unicaes.poo.domain.supplier.dto.DtoSupplierSave;
 import com.unicaes.poo.domain.supplier.dto.DtoSuppliersResponse;
 import com.unicaes.poo.domain.supplier.dto.DtoUpdateSupplier;
 import com.unicaes.poo.infra.exceptions.QueryException;
@@ -22,7 +23,7 @@ public class SupplierService implements ISupplier {
     }
 
     @Override
-    public DtoSuppliersResponse createSupplier(DtoSupplierList dto) {
+    public DtoSuppliersResponse createSupplier(DtoSupplierSave dto) {
         try {
             Supplier supplier = new Supplier();
             supplier.setName(dto.name());
@@ -54,10 +55,10 @@ public class SupplierService implements ISupplier {
     public void deactivateSupplier(long id) {
         try {
             Supplier supplier = supplierRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("Supplier not found with id: " + id));
+                    .orElseThrow(() -> new QueryException("Supplier not found with id: " + id));
 
             if (!supplier.isActive()) {
-                throw new ValidationException("Supplier is already deactivated");
+                throw new QueryException("Supplier is already deactivated");
             }
 
             supplier.setActive(false);
@@ -83,7 +84,7 @@ public class SupplierService implements ISupplier {
     public DtoSuppliersResponse updateSupplier(Long id, DtoUpdateSupplier dto) {
         try {
             Supplier supplier = supplierRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("Supplier not found with id: " + id));
+                    .orElseThrow(() -> new QueryException("Supplier not found with id: " + id));
 
             // Actualización parcial - solo campos no nulos
             if (dto.name() != null && !dto.name().isBlank()) {
@@ -117,6 +118,7 @@ public class SupplierService implements ISupplier {
 
     private DtoSupplierList convertToListDto(Supplier supplier) {
         return new DtoSupplierList(
+                supplier.getSupplierId(),
                 supplier.getName(),
                 supplier.getContact(),
                 supplier.getAddress(),
