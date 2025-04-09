@@ -7,7 +7,5 @@ VALUES
 
 
 INSERT INTO bill_details (bill_id, product_id, quantity, unit_price, total, active)
-SELECT
-    1, p.id, 2, p.price_sell, (p.price_sell * 2), 1
-FROM products p
-WHERE p.id IN (5, 8);
+values
+    (1, 1, 2, 12.25, 25,1)
