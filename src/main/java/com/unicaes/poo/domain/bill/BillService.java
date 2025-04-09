@@ -1,15 +1,16 @@
 package com.unicaes.poo.domain.bill;
 
 
-import com.unicaes.poo.domain.bill.dto.DtoBillList;
-import com.unicaes.poo.domain.bill.dto.DtoBillResponse;
-import com.unicaes.poo.domain.bill.dto.DtoBillSave;
+import com.unicaes.poo.domain.bill.dto.*;
 import com.unicaes.poo.domain.customer.CustomerRepository;
+import com.unicaes.poo.domain.products.ProductRepository;
 import com.unicaes.poo.domain.user.UserRepository;
+import com.unicaes.poo.infra.exceptions.EntityNotFoundException;
 import com.unicaes.poo.infra.exceptions.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,12 @@ public class BillService implements IBillService {
     private BillRepository billRepository;
     @Autowired
     private CustomerRepository clienteService;
+
+    @Autowired
+    private BillDetailsRepository billDetailsRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -33,6 +40,29 @@ public class BillService implements IBillService {
                     .collect(Collectors.toList());
 
 
+        } catch (Exception e) {
+            throw new QueryException(e.getMessage());
+        }
+
+    }
+
+    @Override
+    public DtoBillResponse updateBill(DtoBillUpdate dto) {
+
+        try {
+            var bill = billRepository.getReferenceById(dto.id());
+            var waiter = userRepository.getReferenceById(dto.waiter());
+            if (dto.doneDate() != null) {
+                bill.setDoneDate(dto.doneDate());
+            }
+            if (dto.totalAmount() != null) {
+                bill.setTotalAmount(dto.totalAmount());
+            }
+            if (dto.waiter() != null) {
+                bill.setWaiter(waiter);
+            }
+
+            return DtoBillResponse.toEntity(billRepository.save(bill));
         } catch (Exception e) {
             throw new QueryException(e.getMessage());
         }
@@ -72,4 +102,81 @@ public class BillService implements IBillService {
     }
 
 
+    @Override
+    public List<DtoBillDetailsList> getAllActive() {
+        try {
+            return billDetailsRepository.findAllActiveAsDto();
+        } catch (QueryException e) {
+            throw new QueryException(e.getMessage());
+        }
+
+    }
+
+    @Override
+    public DtoBillDetailsResponse getById(Long id) {
+
+        try {
+            return billDetailsRepository.findActiveById(id)
+                    .map(DtoBillDetailsResponse::fromEntity)
+                    .orElseThrow(() -> new EntityNotFoundException("Bill detail not found with id: " + id));
+        } catch (QueryException e) {
+
+            throw new QueryException(e.getMessage());
+        }
+
+    }
+
+    @Override
+    public DtoBillDetailsResponse save(DtoBillDetailsSave dto) {
+        try {
+
+            System.out.println("DENTRO DEL SAVEEEEEEEEEEEEE");
+            var bill = billRepository.getReferenceById(dto.billId());
+
+
+            var product = productRepository.getReferenceById(dto.productId());
+            System.out.println("DENTRO DEL 1111");
+            if (!product.isActive()) {
+                throw new QueryException("Cannot add inactive product to bill");
+            }
+
+            System.out.println("DENTRO DEL 222222222222222");
+            var detail = new BillDetails();
+            detail.setBill(bill);
+            detail.setProduct(product);
+            detail.setQuantity(dto.quantity());
+            detail.setUnitPrice(product.getPriceSell());
+            detail.setTotal(product.getPriceSell().multiply(BigDecimal.valueOf(dto.quantity())));
+            detail.setActive(true);
+
+            return DtoBillDetailsResponse.fromEntity(billDetailsRepository.save(detail));
+        } catch (Exception e) {
+            throw new QueryException(e.getMessage());
+        }
+
+    }
+
+    @Override
+    public DtoBillDetailsResponse update(DtoBillDetailsUpdate dto) {
+        // Verificar que el detalle existe
+        try {
+            if (!billDetailsRepository.existsByIdAndActiveIsTrue(dto.id())) {
+                throw new QueryException("Bill detail not found with id: " + dto.id());
+            }
+        } catch (QueryException e) {
+            throw new QueryException(e.getMessage());
+        }
+
+
+        billDetailsRepository.updateDetails(dto);
+        return this.getById(dto.id());
+    }
+
+    @Override
+    public void deactivate(Long id) {
+        if (!billDetailsRepository.existsByIdAndActiveIsTrue(id)) {
+            throw new QueryException("Bill detail not found with id: " + id);
+        }
+        billDetailsRepository.deactivateById(id);
+    }
 }

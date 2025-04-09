@@ -1,1 +1,1 @@
-alter table tables add number varchar(2);
+alter table tables add number varchar(3);

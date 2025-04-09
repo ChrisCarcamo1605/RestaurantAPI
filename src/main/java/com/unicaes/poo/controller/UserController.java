@@ -40,6 +40,6 @@ public class UserController {
     public ResponseEntity<DtoUserResponse> updateUser(@RequestBody DtoUserUpdate dto) {
 
         var user = userService.updateUser(dto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.accepted().build();
     }
 }

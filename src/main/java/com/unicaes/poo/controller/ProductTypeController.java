@@ -38,7 +38,7 @@ public class ProductTypeController {
     @PutMapping
     public ResponseEntity<DtoTypeResponse> updateType(@RequestBody DtoUpdateType type) {
         var productTypes = productService.update(type.id(), type.name());
-        return ResponseEntity.ok(productTypes);
+        return ResponseEntity.accepted().body(productTypes);
     }
 
     @DeleteMapping("/{id}")

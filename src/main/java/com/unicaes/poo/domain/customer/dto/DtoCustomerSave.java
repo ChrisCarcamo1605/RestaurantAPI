@@ -1,12 +1,14 @@
 package com.unicaes.poo.domain.customer.dto;
 
 import com.unicaes.poo.domain.customer.Customer;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-public record DtoCustomerSave(String nombre) {
+public record DtoCustomerSave(@NotBlank String name) {
     public Customer toEntity() {
-        Customer cliente = new Customer();
-        cliente.setName(nombre);
-        return cliente;
+        Customer customer = new Customer();
+        customer.setName(name);
+        return customer;
     }
 }
 

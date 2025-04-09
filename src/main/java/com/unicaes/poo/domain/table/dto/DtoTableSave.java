@@ -6,17 +6,17 @@ import jakarta.validation.constraints.NotNull;
 
 public record DtoTableSave(
         @NotBlank
-        String numero,
+        String number,
         @NotNull
-        Integer capacidad) {
+        Integer capacity) {
 
 
 
 
     public Table toEntity() {
         Table mesa = new Table();
-        mesa.setNumber(numero);
-        mesa.setCapacity(capacidad);
+        mesa.setNumber(number);
+        mesa.setCapacity(capacity);
         return mesa;
     }
 }

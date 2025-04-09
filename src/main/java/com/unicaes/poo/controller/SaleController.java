@@ -37,7 +37,7 @@ public class SaleController {
     @PutMapping("/{id}")
     public ResponseEntity<DtoSaleResponse> updateSale(@PathVariable Long id, @Valid @RequestBody DtoUpdateSale dto) {
         var sale = saleService.updateSale(id, dto);
-        return ResponseEntity.ok().body(new DtoSaleResponse(sale.getIdSale(), sale.getIdBill()));
+        return ResponseEntity.accepted().body(new DtoSaleResponse(sale.getIdSale(), sale.getIdBill()));
     }
 
     @DeleteMapping("/{id}")

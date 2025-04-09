@@ -32,7 +32,7 @@ public class IngredientController {
             @PathVariable Long id,
             @RequestBody DtoIngredientUpdate dto) {
         DtoIngredientResponse response = ingredientService.updateIngredient(id, dto);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.accepted().body(response);
     }
 
     @DeleteMapping("/{id}")

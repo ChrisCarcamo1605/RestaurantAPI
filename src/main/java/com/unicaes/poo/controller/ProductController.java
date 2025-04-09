@@ -47,7 +47,7 @@ public class ProductController {
 
         URI uri = uriBuilder.path("product").buildAndExpand(product.id()).toUri();
 
-        return ResponseEntity.ok().body(product);
+        return ResponseEntity.accepted().body(product);
     }
 
     @DeleteMapping("/{id}")

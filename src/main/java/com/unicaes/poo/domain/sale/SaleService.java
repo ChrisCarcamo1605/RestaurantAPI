@@ -20,12 +20,18 @@ public class SaleService {
     private SaleRepository saleRepository;
 
     public Sale save(DtoSaveSale dto) {
+
+
+
+
         try {
             Sale sale = new Sale();
             sale.setIdBill(dto.billId());
             sale.setActive(true);
             sale.setSaleDate(dto.saleDate());
             sale.setTotal(dto.total());
+
+
 
             return saleRepository.save(sale);
         } catch (Exception e) {
@@ -34,7 +40,8 @@ public class SaleService {
     }
 
     public List<DtoSaleList> getSalesList() {
-        try {
+        try
+        {
             return saleRepository.findByActiveTrue()
                     .stream()
                     .map(sale -> new DtoSaleList(sale))

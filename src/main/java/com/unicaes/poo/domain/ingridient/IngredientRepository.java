@@ -19,7 +19,7 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
     // Buscar ingredientes por cantidad (mayor o igual que)
     List<Ingredient> findByQuantityGreaterThanEqual(Double quantity);
 
-    // Buscar ingredientes que contengan un consumible con nombre específico
+    // Buscar ingredientes que contengan un consumible con name específico
     Page<Ingredient> findByConsumableNameContainingIgnoreCase(String name, Pageable pageable);
 
     // Buscar ingredientes por producto y cantidad mínima

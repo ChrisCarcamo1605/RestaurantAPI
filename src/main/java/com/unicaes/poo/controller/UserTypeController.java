@@ -38,7 +38,7 @@ public class UserTypeController {
     @PutMapping
     public ResponseEntity<DtoUserResponse> updateUser(@RequestBody DtoUserUpdate dto) {
         var user = userService.updateUser(dto);
-        return ResponseEntity.ok().body(user);
+        return ResponseEntity.accepted().body(user);
     }
 
     @DeleteMapping

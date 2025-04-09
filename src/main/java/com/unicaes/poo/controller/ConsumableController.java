@@ -40,7 +40,7 @@ public class ConsumableController {
             @Valid @RequestBody DtoConsumableUpdate dto) {
 
         DtoConsumableResponse response = consumableService.updateConsumable(id, dto);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.accepted().body(response);
     }
 
     @DeleteMapping("/{id}")
