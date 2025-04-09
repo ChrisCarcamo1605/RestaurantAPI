@@ -1,6 +1,6 @@
 package com.unicaes.poo.domain.bill;
 
-import com.unicaes.poo.domain.cliente.Cliente;
+import com.unicaes.poo.domain.customer.Customer;
 import com.unicaes.poo.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,7 +30,7 @@ public class Bill {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer")
-    Cliente customer;
+    Customer customer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "waiter")

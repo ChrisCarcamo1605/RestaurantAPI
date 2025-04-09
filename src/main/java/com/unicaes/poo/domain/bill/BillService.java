@@ -4,18 +4,13 @@ package com.unicaes.poo.domain.bill;
 import com.unicaes.poo.domain.bill.dto.DtoBillList;
 import com.unicaes.poo.domain.bill.dto.DtoBillResponse;
 import com.unicaes.poo.domain.bill.dto.DtoBillSave;
-import com.unicaes.poo.domain.cliente.ClienteRepository;
-import com.unicaes.poo.domain.cliente.ClienteService;
-import com.unicaes.poo.domain.cliente.dto.DtoClienteResponse;
+import com.unicaes.poo.domain.customer.CustomerRepository;
 import com.unicaes.poo.domain.user.UserRepository;
 import com.unicaes.poo.infra.exceptions.QueryException;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,7 +19,7 @@ public class BillService implements IBillService {
     @Autowired
     private BillRepository billRepository;
     @Autowired
-    private ClienteRepository clienteService;
+    private CustomerRepository clienteService;
 
     @Autowired
     private UserRepository userRepository;

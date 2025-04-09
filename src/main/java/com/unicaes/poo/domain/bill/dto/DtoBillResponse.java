@@ -1,8 +1,6 @@
 package com.unicaes.poo.domain.bill.dto;
 
 import com.unicaes.poo.domain.bill.Bill;
-import com.unicaes.poo.domain.cliente.Cliente;
-import com.unicaes.poo.domain.user.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,7 +17,7 @@ public record DtoBillResponse(
 
         return new DtoBillResponse(bill.getId(),
                 bill.getEmissionDate(),
-                bill.getCustomer().getNombre(),
+                bill.getCustomer().getName(),
                 bill.getWaiter().getUsername(),
                 bill.getDoneDate(),
                 bill.getTotalAmount(),

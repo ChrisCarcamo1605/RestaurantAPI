@@ -1,15 +1,15 @@
 -- tabla mesa
-create table mesa (
-                      id_mesa        bigint auto_increment primary key,
-                      capacidad      int not null,
-                      activo_mesa    boolean not null
+create table tables (
+                      id_table        bigint auto_increment primary key,
+                      capacity      int not null,
+                      active    boolean not null
 );
 
 -- tabla cliente
-create table cliente (
-                         id_cliente     bigint auto_increment primary key,
-                         nombre         varchar(100) not null,
-                         mesa_fk        bigint,
-                         constraint fk_mesa_cliente
-                             foreign key (mesa_fk) references mesa(id_mesa)
+create table customers (
+                         id_customer     bigint auto_increment primary key,
+                         name         varchar(100) not null,
+                         table_fk        bigint,
+                         constraint fk_mesa_customer
+                             foreign key ( table_fk ) references tables(id_table)
 );

@@ -1,4 +1,4 @@
-INSERT INTO mesa (capacidad, activo_mesa, numero)
+INSERT INTO tables (capacity, active, number)
 VALUES (4, 1, 'T1'),
        (2, 1, 'T2'),
        (6, 1, 'T3'),
@@ -10,7 +10,7 @@ VALUES (4, 1, 'T1'),
        (6, 1, 'T9'),
        (4, 1, 'T3');
 
-INSERT INTO cliente (id_cliente, nombre, mesa_fk)
+INSERT INTO customers (id_customer, name, table_fk)
 VALUES (101, 'Lionel Messi', 1),
        (102, 'Cristiano Ronaldo', 2),
        (103, 'Neymar Jr', 3),

@@ -1,41 +1,37 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.domain.mesa.IMesaService;
-import com.unicaes.poo.domain.mesa.dto.*;
+import com.unicaes.poo.domain.table.ITableService;
+import com.unicaes.poo.domain.table.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/mesas")
+@RequestMapping("/tables")
 public class MesaController {
 
-    private final IMesaService mesaService;
-
     @Autowired
-    public MesaController(IMesaService mesaService) {
-        this.mesaService = mesaService;
-    }
+    private ITableService mesaService;
 
     @GetMapping
-    public List<DtoMesaList> findAll() {
+    public List<DtoTableList> findAll() {
         return mesaService.findAll();
     }
 
     @GetMapping("/{id}")
-    public DtoMesaResponse findById(@PathVariable Long id) {
+    public DtoTableResponse findById(@PathVariable Long id) {
         return mesaService.findById(id);
     }
 
     @PostMapping
-    public DtoMesaResponse save(@RequestBody DtoMesaSave dto) {
+    public DtoTableResponse save(@RequestBody DtoTableSave dto) {
         return mesaService.save(dto);
     }
 
-    @PutMapping("/{id}")
-    public DtoMesaResponse update(@PathVariable Long id, @RequestBody DtoMesaUpdate dto) {
-        return mesaService.update(id, dto);
+    @PutMapping()
+    public DtoTableResponse update(@RequestBody DtoTableUpdate dto) {
+        return mesaService.update( dto);
     }
 
     @DeleteMapping("/{id}")
