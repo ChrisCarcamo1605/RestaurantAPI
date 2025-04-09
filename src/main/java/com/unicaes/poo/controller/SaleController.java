@@ -17,18 +17,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/sale")
 public class SaleController {
-
     @Autowired
     private SaleService saleService;
 
     @PostMapping
     public ResponseEntity<DtoSaleResponse> addSale(@Valid @RequestBody DtoSaveSale dto, UriComponentsBuilder uriBuilder) {
-
         var sale = saleService.save(dto);
-
         var response = new DtoSaleResponse(sale.getIdSale(), sale.getIdBill());
         URI uri = uriBuilder.path("/sale/{id}").buildAndExpand(sale.getIdSale()).toUri();
-
         return ResponseEntity.created(uri).body(response);
     }
 
@@ -40,9 +36,7 @@ public class SaleController {
 
     @PutMapping("/{id}")
     public ResponseEntity<DtoSaleResponse> updateSale(@PathVariable Long id, @Valid @RequestBody DtoUpdateSale dto) {
-
         var sale = saleService.updateSale(id, dto);
-
         return ResponseEntity.ok().body(new DtoSaleResponse(sale.getIdSale(), sale.getIdBill()));
     }
 
@@ -51,4 +45,5 @@ public class SaleController {
         saleService.deleteSale(id);
         return ResponseEntity.noContent().build();
     }
+
 }

@@ -7,7 +7,10 @@ import com.unicaes.poo.infra.exceptions.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +24,8 @@ public class SaleService {
             Sale sale = new Sale();
             sale.setIdBill(dto.billId());
             sale.setActive(true);
+            sale.setSaleDate(dto.saleDate());
+            sale.setTotal(dto.total());
 
             return saleRepository.save(sale);
         } catch (Exception e) {
@@ -32,7 +37,7 @@ public class SaleService {
         try {
             return saleRepository.findByActiveTrue()
                     .stream()
-                    .map(DtoSaleList::new)
+                    .map(sale -> new DtoSaleList(sale))
                     .collect(Collectors.toList());
         } catch (Exception e) {
             throw new QueryException("Error al obtener la lista de ventas: " + e.getMessage());
@@ -47,7 +52,12 @@ public class SaleService {
             if (dto.billId() != null) {
                 sale.setIdBill(dto.billId());
             }
-
+            if (dto.saleDate() != null) {
+                sale.setSaleDate(dto.saleDate());
+            }
+            if (dto.total() != null) {
+                sale.setTotal(dto.total());
+            }
             return saleRepository.save(sale);
         } catch (Exception e) {
             throw new QueryException("Error al actualizar la venta: " + e.getMessage());
