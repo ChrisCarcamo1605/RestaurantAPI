@@ -2,12 +2,10 @@ package com.unicaes.poo.controller;
 
 import com.unicaes.poo.domain.consumables.IConsumable;
 import com.unicaes.poo.domain.consumables.dto.*;
-import com.unicaes.poo.infra.exceptions.ConsumableException;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -25,38 +23,30 @@ public class ConsumableController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createConsumable(
+    public ResponseEntity<DtoConsumableResponse> createConsumable(
             @Valid @RequestBody DtoConsumableSave dto,
             UriComponentsBuilder uriBuilder) {
-        try {
-            DtoConsumableResponse response = consumableService.createConsumable(dto);
-            URI uri = uriBuilder.path("/consumable/{id}").buildAndExpand(response.consumableId()).toUri();
-            return ResponseEntity.created(uri).body(response);
-        } catch (ConsumableException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+
+        DtoConsumableResponse response = consumableService.createConsumable(dto);
+        URI uri = uriBuilder.path("/consumable/{id}")
+                .buildAndExpand(response.consumableId())
+                .toUri();
+        return ResponseEntity.created(uri).body(response);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateConsumable(
+    public ResponseEntity<DtoConsumableResponse> updateConsumable(
             @PathVariable Long id,
             @Valid @RequestBody DtoConsumableUpdate dto) {
-        try {
-            DtoConsumableResponse response = consumableService.updateConsumable(id, dto);
-            return ResponseEntity.ok(response);
-        } catch (ConsumableException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+
+        DtoConsumableResponse response = consumableService.updateConsumable(id, dto);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deactivateConsumable(@PathVariable Long id) {
-        try {
-            consumableService.deactivateConsumable(id);
-            return ResponseEntity.noContent().build();
-        } catch (ConsumableException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    public ResponseEntity<Void> deactivateConsumable(@PathVariable Long id) {
+        consumableService.deactivateConsumable(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
@@ -64,6 +54,4 @@ public class ConsumableController {
             @PageableDefault(size = 100) Pageable pageable) {
         return ResponseEntity.ok(consumableService.getAllConsumable(pageable));
     }
-
-
 }

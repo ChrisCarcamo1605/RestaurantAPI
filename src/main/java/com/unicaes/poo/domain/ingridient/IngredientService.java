@@ -6,6 +6,7 @@ import com.unicaes.poo.domain.ingridient.dto.*;
 import com.unicaes.poo.domain.products.Product;
 import com.unicaes.poo.domain.products.ProductRepository;
 import com.unicaes.poo.infra.exceptions.NotFoundException;
+import com.unicaes.poo.infra.exceptions.QueryException;
 import com.unicaes.poo.infra.exceptions.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,17 +25,17 @@ public class IngredientService implements IIngridient {
     @Override
     @Transactional
     public DtoIngredientResponse saveIngredient(DtoIngredientSave dto) {
+        Consumable consumable = consumableRepository.findById(dto.consumableId())
+                .orElseThrow(() -> new NotFoundException("Consumible no encontrado con ID: " + dto.consumableId()));
+
+        Product product = productRepository.findById(dto.productId())
+                .orElseThrow(() -> new NotFoundException("Producto no encontrado con ID: " + dto.productId()));
+
+        if (dto.quantity() <= 0) {
+            throw new ValidationException("La cantidad debe ser mayor que cero");
+        }
+
         try {
-            Consumable consumable = consumableRepository.findById(dto.consumableId())
-                    .orElseThrow(() -> new NotFoundException("Consumible no encontrado con ID: " + dto.consumableId()));
-
-            Product product = productRepository.findById(dto.productId())
-                    .orElseThrow(() -> new NotFoundException("Producto no encontrado con ID: " + dto.productId()));
-
-            if (dto.quantity() <= 0) {
-                throw new ValidationException("La cantidad debe ser mayor que cero");
-            }
-
             Ingredient ingredient = new Ingredient();
             ingredient.setConsumable(consumable);
             ingredient.setQuantity(dto.quantity());
@@ -42,10 +43,8 @@ public class IngredientService implements IIngridient {
 
             Ingredient savedIngredient = ingredientRepository.save(ingredient);
             return toResponseDto(savedIngredient);
-        } catch (NotFoundException | ValidationException e) {
-            throw e;
         } catch (Exception e) {
-            throw new RuntimeException("Error al guardar el ingrediente: " + e.getMessage(), e);
+            throw new QueryException("Error al guardar el ingrediente: " + e.getMessage());
         }
     }
 
@@ -55,18 +54,17 @@ public class IngredientService implements IIngridient {
             return ingredientRepository.findAll(pageable)
                     .map(this::toResponseDto);
         } catch (Exception e) {
-            throw new RuntimeException("Error al obtener los ingredientes: " + e.getMessage(), e);
+            throw new QueryException("Error al obtener los ingredientes: " + e.getMessage());
         }
     }
 
     @Override
     @Transactional
     public DtoIngredientResponse updateIngredient(Long id, DtoIngredientUpdate dto) {
-        try {
-            Ingredient ingredient = ingredientRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("Ingrediente no encontrado con ID: " + id));
+        Ingredient ingredient = ingredientRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Ingrediente no encontrado con ID: " + id));
 
-            // Actualización parcial - solo campos no nulos
+        try {
             if (dto.consumableId() != null) {
                 Consumable consumable = consumableRepository.findById(dto.consumableId())
                         .orElseThrow(() -> new NotFoundException("Consumible no encontrado con ID: " + dto.consumableId()));
@@ -88,25 +86,22 @@ public class IngredientService implements IIngridient {
 
             Ingredient updatedIngredient = ingredientRepository.save(ingredient);
             return toResponseDto(updatedIngredient);
-        } catch (NotFoundException | ValidationException e) {
-            throw e;
         } catch (Exception e) {
-            throw new RuntimeException("Error al actualizar el ingrediente: " + e.getMessage(), e);
+            throw new QueryException("Error al actualizar el ingrediente: " + e.getMessage());
         }
     }
 
     @Override
     @Transactional
     public void deleteIngredient(Long id) {
+        if (!ingredientRepository.existsById(id)) {
+            throw new NotFoundException("Ingrediente no encontrado con ID: " + id);
+        }
+
         try {
-            if (!ingredientRepository.existsById(id)) {
-                throw new NotFoundException("Ingrediente no encontrado con ID: " + id);
-            }
             ingredientRepository.deleteById(id);
-        } catch (NotFoundException e) {
-            throw e;
         } catch (Exception e) {
-            throw new RuntimeException("Error al eliminar el ingrediente: " + e.getMessage(), e);
+            throw new QueryException("Error al eliminar el ingrediente: " + e.getMessage());
         }
     }
 
@@ -122,15 +117,5 @@ public class IngredientService implements IIngridient {
         );
     }
 
-    private DtoIngredientList toListDto(Ingredient ingredient) {
-        return new DtoIngredientList(
-                ingredient.getId(),
-                ingredient.getConsumable().getId(),
-                ingredient.getConsumable().getName(),
-                ingredient.getQuantity(),
-                ingredient.getConsumable().getMeasurementUnit().toString(),
-                ingredient.getProduct().getId(),
-                ingredient.getProduct().getName()
-        );
-    }
+
 }

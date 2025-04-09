@@ -1,10 +1,9 @@
 package com.unicaes.poo.domain.consumables;
 
 import com.unicaes.poo.domain.consumables.dto.*;
-import com.unicaes.poo.infra.exceptions.ConsumableException;
-import com.unicaes.poo.domain.consumableTypes.ConsumableTypes;
 import com.unicaes.poo.domain.supplier.Supplier;
 import com.unicaes.poo.domain.supplier.SupplierRepository;
+import com.unicaes.poo.infra.exceptions.QueryException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,10 +23,10 @@ public class ConsumableService implements IConsumable {
     @Override
     @Transactional
     public DtoConsumableResponse createConsumable(DtoConsumableSave dto) {
-        try {
-            Supplier supplier = supplierRepository.findById(dto.supplierId())
-                    .orElseThrow(() -> new ConsumableException("Proveedor no encontrado con ID: " + dto.supplierId()));
+        Supplier supplier = supplierRepository.findById(dto.supplierId())
+                .orElseThrow(() -> new QueryException("Proveedor no encontrado con ID: " + dto.supplierId()));
 
+        try {
             Consumable consumable = new Consumable();
             consumable.setName(dto.name());
             consumable.setPrice(BigDecimal.valueOf(dto.price()));
@@ -41,32 +39,31 @@ public class ConsumableService implements IConsumable {
             Consumable savedConsumable = consumableRepository.save(consumable);
             return convertToResponseDto(savedConsumable);
         } catch (Exception e) {
-            throw new ConsumableException("Error al crear el consumible: " + e.getMessage(), e);
+            throw new QueryException("Error al crear el consumible: " + e.getMessage());
         }
     }
-
-
 
     @Override
     @Transactional
     public void deactivateConsumable(Long id) {
+        Consumable consumable = consumableRepository.findById(id)
+                .orElseThrow(() -> new QueryException("Consumible no encontrado con ID: " + id));
+
         try {
-            Consumable consumable = consumableRepository.findById(id)
-                    .orElseThrow(() -> new ConsumableException("Consumible no encontrado con ID: " + id));
             consumable.setActive(false);
             consumableRepository.save(consumable);
         } catch (Exception e) {
-            throw new ConsumableException("Error al desactivar el consumible: " + e.getMessage(), e);
+            throw new QueryException("Error al desactivar el consumible: " + e.getMessage());
         }
     }
 
     @Override
     @Transactional
     public DtoConsumableResponse updateConsumable(Long id, DtoConsumableUpdate dto) {
-        try {
-            Consumable consumable = consumableRepository.findById(id)
-                    .orElseThrow(() -> new ConsumableException("Consumible no encontrado con ID: " + id));
+        Consumable consumable = consumableRepository.findById(id)
+                .orElseThrow(() -> new QueryException("Consumible no encontrado con ID: " + id));
 
+        try {
             if (dto.name() != null) consumable.setName(dto.name());
             if (dto.price() != null) consumable.setPrice(BigDecimal.valueOf(dto.price()));
             if (dto.stock() != null) consumable.setStock(dto.stock());
@@ -74,14 +71,14 @@ public class ConsumableService implements IConsumable {
             if (dto.measurementUnit() != null) consumable.setMeasurementUnit(dto.measurementUnit());
             if (dto.supplierId() != null) {
                 Supplier supplier = supplierRepository.findById(dto.supplierId())
-                        .orElseThrow(() -> new ConsumableException("Proveedor no encontrado con ID: " + dto.supplierId()));
+                        .orElseThrow(() -> new QueryException("Proveedor no encontrado con ID: " + dto.supplierId()));
                 consumable.setSupplier(supplier);
             }
 
             Consumable updatedConsumable = consumableRepository.save(consumable);
             return convertToResponseDto(updatedConsumable);
         } catch (Exception e) {
-            throw new ConsumableException("Error al actualizar el consumible: " + e.getMessage(), e);
+            throw new QueryException("Error al actualizar el consumible: " + e.getMessage());
         }
     }
 
@@ -91,10 +88,9 @@ public class ConsumableService implements IConsumable {
             return consumableRepository.findAll(pageable)
                     .map(this::convertToListDto);
         } catch (Exception e) {
-            throw new ConsumableException("Error al obtener todos los consumibles: " + e.getMessage(), e);
+            throw new QueryException("Error al obtener todos los consumibles: " + e.getMessage());
         }
     }
-
 
     private DtoConsumableResponse convertToResponseDto(Consumable consumable) {
         return new DtoConsumableResponse(

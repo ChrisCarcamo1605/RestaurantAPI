@@ -2,8 +2,6 @@ package com.unicaes.poo.controller;
 
 import com.unicaes.poo.domain.ingridient.dto.*;
 import com.unicaes.poo.domain.ingridient.IIngridient;
-import com.unicaes.poo.infra.exceptions.NotFoundException;
-import com.unicaes.poo.infra.exceptions.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,54 +16,28 @@ public class IngredientController {
     private final IIngridient ingredientService;
 
     @PostMapping
-    public ResponseEntity<?> createIngredient(@RequestBody DtoIngredientSave dto) {
-        try {
-            DtoIngredientResponse response = ingredientService.saveIngredient(dto);
-            return ResponseEntity.ok(response);
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error al crear el ingrediente");
-        }
+    public ResponseEntity<DtoIngredientResponse> createIngredient(@RequestBody DtoIngredientSave dto) {
+        DtoIngredientResponse response = ingredientService.saveIngredient(dto);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllIngredients(Pageable pageable) {
-        try {
-            Page<DtoIngredientResponse> ingredients = ingredientService.getAllIngredients(pageable);
-            return ResponseEntity.ok(ingredients);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error al obtener los ingredientes");
-        }
+    public ResponseEntity<Page<DtoIngredientResponse>> getAllIngredients(Pageable pageable) {
+        Page<DtoIngredientResponse> ingredients = ingredientService.getAllIngredients(pageable);
+        return ResponseEntity.ok(ingredients);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateIngredient(
+    public ResponseEntity<DtoIngredientResponse> updateIngredient(
             @PathVariable Long id,
             @RequestBody DtoIngredientUpdate dto) {
-        try {
-            DtoIngredientResponse response = ingredientService.updateIngredient(id, dto);
-            return ResponseEntity.ok(response);
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error al actualizar el ingrediente");
-        }
+        DtoIngredientResponse response = ingredientService.updateIngredient(id, dto);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteIngredient(@PathVariable Long id) {
-        try {
-            ingredientService.deleteIngredient(id);
-            return ResponseEntity.noContent().build();
-        } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error al eliminar el ingrediente");
-        }
+    public ResponseEntity<Void> deleteIngredient(@PathVariable Long id) {
+        ingredientService.deleteIngredient(id);
+        return ResponseEntity.noContent().build();
     }
 }

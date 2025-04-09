@@ -4,8 +4,6 @@ import com.unicaes.poo.domain.supplier.SupplierService;
 import com.unicaes.poo.domain.supplier.dto.DtoSupplierList;
 import com.unicaes.poo.domain.supplier.dto.DtoSuppliersResponse;
 import com.unicaes.poo.domain.supplier.dto.DtoUpdateSupplier;
-import com.unicaes.poo.infra.exceptions.ValidationException;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,74 +27,42 @@ public class SupplierController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createSupplier(
+    public ResponseEntity<DtoSuppliersResponse> createSupplier(
             @Valid @RequestBody DtoSupplierList dto,
             UriComponentsBuilder uriBuilder) {
-        try {
-            DtoSuppliersResponse response = supplierService.createSupplier(dto);
+        DtoSuppliersResponse response = supplierService.createSupplier(dto);
 
-            URI uri = uriBuilder.path("/suppliers/{id}")
-                    .buildAndExpand(response.supplierId())
-                    .toUri();
+        URI uri = uriBuilder.path("/suppliers/{id}")
+                .buildAndExpand(response.supplierId())
+                .toUri();
 
-            return ResponseEntity.created(uri).body(response);
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error creating supplier");
-        }
+        return ResponseEntity.created(uri).body(response);
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllSuppliers(
+    public ResponseEntity<Page<DtoSupplierList>> getAllSuppliers(
             @PageableDefault(size = 10) Pageable pageable) {
-        try {
-            Page<DtoSupplierList> suppliers = supplierService.getSuppliersPage(pageable);
-            return ResponseEntity.ok(suppliers);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error getting suppliers");
-        }
+        Page<DtoSupplierList> suppliers = supplierService.getSuppliersPage(pageable);
+        return ResponseEntity.ok(suppliers);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getSupplierById(@PathVariable Long id) {
-        try {
-            DtoSuppliersResponse supplier = supplierService.getSupplierById(id);
-            return ResponseEntity.ok(supplier);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error getting supplier");
-        }
+    public ResponseEntity<DtoSuppliersResponse> getSupplierById(@PathVariable Long id) {
+        DtoSuppliersResponse supplier = supplierService.getSupplierById(id);
+        return ResponseEntity.ok(supplier);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateSupplier(
+    public ResponseEntity<DtoSuppliersResponse> updateSupplier(
             @PathVariable Long id,
             @Valid @RequestBody DtoUpdateSupplier dto) {
-        try {
-            DtoSuppliersResponse updatedSupplier = supplierService.updateSupplier(id, dto);
-            return ResponseEntity.ok(updatedSupplier);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error updating supplier");
-        }
+        DtoSuppliersResponse updatedSupplier = supplierService.updateSupplier(id, dto);
+        return ResponseEntity.ok(updatedSupplier);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deactivateSupplier(@PathVariable Long id) {
-        try {
-            supplierService.deactivateSupplier(id);
-            return ResponseEntity.noContent().build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error deactivating supplier");
-        }
+    public ResponseEntity<Void> deactivateSupplier(@PathVariable Long id) {
+        supplierService.deactivateSupplier(id);
+        return ResponseEntity.noContent().build();
     }
 }
