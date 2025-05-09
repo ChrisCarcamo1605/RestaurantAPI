@@ -29,10 +29,10 @@ public class ReservationService implements IReservation {
             reservation.setActive(true);
 
             return mapToDto(reservationRepository.save(reservation));
-        } catch (Exception e) {
-            throw new QueryException(e.getMessage());
+} catch (Exception e) {
+        throw new QueryException(e.getMessage());
         }
-    }
+        }
 
     @Override
     public List<DtoReservationResponse> getAllReservations() {
