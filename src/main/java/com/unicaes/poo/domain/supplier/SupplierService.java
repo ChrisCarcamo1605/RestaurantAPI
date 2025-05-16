@@ -4,9 +4,9 @@ import com.unicaes.poo.domain.supplier.dto.DtoSupplierList;
 import com.unicaes.poo.domain.supplier.dto.DtoSupplierSave;
 import com.unicaes.poo.domain.supplier.dto.DtoSuppliersResponse;
 import com.unicaes.poo.domain.supplier.dto.DtoUpdateSupplier;
+import com.unicaes.poo.domain.supplier.interfaces.ISupplier;
+import com.unicaes.poo.domain.supplier.interfaces.SupplierRepository;
 import com.unicaes.poo.infra.exceptions.QueryException;
-import com.unicaes.poo.infra.exceptions.ValidationException;
-import com.unicaes.poo.infra.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,10 +42,9 @@ public class SupplierService implements ISupplier {
     public DtoSuppliersResponse getSupplierById(Long id) {
         try {
             Supplier supplier = supplierRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("Supplier not found with id: " + id));
+                    .orElseThrow(() -> new QueryException("Supplier not found with id: " + id));
             return convertToResponseDto(supplier);
-        } catch (NotFoundException e) {
-            throw e;
+
         } catch (Exception e) {
             throw new QueryException("Error getting supplier: " + e.getMessage());
         }
@@ -63,8 +62,7 @@ public class SupplierService implements ISupplier {
 
             supplier.setActive(false);
             supplierRepository.save(supplier);
-        } catch (NotFoundException | ValidationException e) {
-            throw e;
+
         } catch (Exception e) {
             throw new QueryException("Error deactivating supplier: " + e.getMessage());
         }
@@ -99,8 +97,6 @@ public class SupplierService implements ISupplier {
 
             Supplier updatedSupplier = supplierRepository.save(supplier);
             return convertToResponseDto(updatedSupplier);
-        } catch (NotFoundException e) {
-            throw e;
         } catch (Exception e) {
             throw new QueryException("Error updating supplier: " + e.getMessage());
         }

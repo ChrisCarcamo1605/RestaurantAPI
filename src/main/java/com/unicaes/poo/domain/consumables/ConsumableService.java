@@ -1,8 +1,10 @@
 package com.unicaes.poo.domain.consumables;
 
 import com.unicaes.poo.domain.consumables.dto.*;
+import com.unicaes.poo.domain.consumables.interfaces.ConsumableRepository;
+import com.unicaes.poo.domain.consumables.interfaces.IConsumable;
 import com.unicaes.poo.domain.supplier.Supplier;
-import com.unicaes.poo.domain.supplier.SupplierRepository;
+import com.unicaes.poo.domain.supplier.interfaces.SupplierRepository;
 import com.unicaes.poo.infra.exceptions.QueryException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

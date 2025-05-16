@@ -1,9 +1,10 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.domain.products.IProductService;
+import com.unicaes.poo.domain.products.interfaces.IProductService;
 import com.unicaes.poo.domain.products.dto.DtoSaveType;
 import com.unicaes.poo.domain.products.dto.DtoTypeResponse;
 import com.unicaes.poo.domain.products.dto.DtoUpdateType;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ public class ProductTypeController {
 
 
     @PostMapping
+    @Transactional
     public ResponseEntity<DtoTypeResponse> addProductType(@RequestBody DtoSaveType type,
                                                           UriComponentsBuilder uriBuilder) {
 
@@ -36,6 +38,7 @@ public class ProductTypeController {
     }
 
     @PutMapping
+    @Transactional
     public ResponseEntity<DtoTypeResponse> updateType(@RequestBody DtoUpdateType type) {
         var productTypes = productService.update(type.id(), type.name());
         return ResponseEntity.accepted().body(productTypes);

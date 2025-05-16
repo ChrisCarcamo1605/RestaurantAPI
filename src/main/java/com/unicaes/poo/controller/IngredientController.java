@@ -1,9 +1,8 @@
 package com.unicaes.poo.controller;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
-import com.unicaes.poo.domain.ingridient.IngredientService;
-import com.unicaes.poo.domain.ingridient.dto.*;
-import com.unicaes.poo.domain.ingridient.IIngredient;
+import com.unicaes.poo.domain.ingredient.dto.*;
+import com.unicaes.poo.domain.ingredient.interfaces.IIngredient;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,7 @@ public class IngredientController {
     private IIngredient ingredientService;
 
     @PostMapping
+    @Transactional
     public ResponseEntity<DtoIngredientResponse> createIngredient(@RequestBody @Valid DtoIngredientSave dto, UriComponentsBuilder ucBuilder) {
 
 
@@ -41,6 +41,7 @@ public class IngredientController {
     }
 
     @PatchMapping("/{id}")
+    @Transactional
     public ResponseEntity<DtoIngredientResponse> updateIngredient(
             @PathVariable Long id,
             @Valid

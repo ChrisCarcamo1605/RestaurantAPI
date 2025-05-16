@@ -1,7 +1,8 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.domain.consumables.IConsumable;
+import com.unicaes.poo.domain.consumables.interfaces.IConsumable;
 import com.unicaes.poo.domain.consumables.dto.*;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ public class ConsumableController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<DtoConsumableResponse> createConsumable(
             @Valid @RequestBody DtoConsumableSave dto,
             UriComponentsBuilder uriBuilder) {
@@ -35,6 +37,7 @@ public class ConsumableController {
     }
 
     @PatchMapping("/{id}")
+    @Transactional
     public ResponseEntity<DtoConsumableResponse> updateConsumable(
             @PathVariable Long id,
             @Valid @RequestBody DtoConsumableUpdate dto) {

@@ -4,9 +4,11 @@ import com.unicaes.poo.domain.products.dto.DtoProductResponse;
 import com.unicaes.poo.domain.products.dto.DtoSaveProduct;
 import com.unicaes.poo.domain.products.dto.DtoTypeResponse;
 import com.unicaes.poo.domain.products.dto.DtoUpdateProduct;
+import com.unicaes.poo.domain.products.interfaces.IProductService;
+import com.unicaes.poo.domain.products.interfaces.ProductRepository;
+import com.unicaes.poo.domain.products.interfaces.ProductTypeRepository;
 import com.unicaes.poo.infra.exceptions.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +48,11 @@ public class ProductService implements IProductService {
     public List<DtoProductResponse> getProductsList(Pageable pageable) {
         return productRepository.findByActiveTrue(pageable).stream()
                 .map(DtoProductResponse::fromEntity).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Product> findPriceLess(double price) {
+        return productRepository.findPriceLess(price);
     }
 
     @Override

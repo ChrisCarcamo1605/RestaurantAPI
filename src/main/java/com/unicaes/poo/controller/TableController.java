@@ -1,7 +1,8 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.domain.table.ITableService;
+import com.unicaes.poo.domain.table.interfaces.ITableService;
 import com.unicaes.poo.domain.table.dto.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,7 @@ public class TableController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<DtoTableResponse> save(@RequestBody DtoTableSave dto, UriComponentsBuilder uriBuilder) {
         var table = mesaService.save(dto);
         URI uri = uriBuilder.path("/tables/{id}").buildAndExpand(table.id()).toUri();
@@ -37,6 +39,7 @@ public class TableController {
     }
 
     @PutMapping()
+    @Transactional
     public ResponseEntity<DtoTableResponse> update(@RequestBody DtoTableUpdate dto) {
         return ResponseEntity.accepted().body(mesaService.update(dto));
     }

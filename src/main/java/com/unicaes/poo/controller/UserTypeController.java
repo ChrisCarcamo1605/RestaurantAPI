@@ -1,12 +1,11 @@
 package com.unicaes.poo.controller;
 
 import com.unicaes.poo.domain.products.dto.DtoSaveType;
-import com.unicaes.poo.domain.user.IUserService;
-import com.unicaes.poo.domain.user.User;
+import com.unicaes.poo.domain.user.interfaces.IUserService;
 import com.unicaes.poo.domain.user.dtos.*;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -22,6 +21,7 @@ public class UserTypeController {
     private IUserService userService;
 
     @PostMapping
+    @Transactional
     public ResponseEntity<DtoUserTypeResponse> addUser(@Valid @RequestBody DtoSaveType user, UriComponentsBuilder ucBuilder) {
 
         var newUser = userService.saveType(user);
@@ -36,6 +36,7 @@ public class UserTypeController {
     }
 
     @PutMapping
+    @Transactional
     public ResponseEntity<DtoUserTypeResponse> updateUser(@Valid @RequestBody DtoUserTypeUpdate dto) {
         var user = userService.updateType(dto);
         return ResponseEntity.accepted().body(user);

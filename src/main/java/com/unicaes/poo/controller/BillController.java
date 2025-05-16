@@ -1,6 +1,6 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.domain.bill.IBillService;
+import com.unicaes.poo.domain.bill.interfaces.IBillService;
 import com.unicaes.poo.domain.bill.dto.DtoBillList;
 import com.unicaes.poo.domain.bill.dto.DtoBillResponse;
 import com.unicaes.poo.domain.bill.dto.DtoBillSave;
@@ -25,6 +25,7 @@ public class BillController {
 
 
     @GetMapping
+
     public ResponseEntity<List<DtoBillList>> getBills() {
         var bills = billService.getAll();
         return ResponseEntity.ok(bills);
@@ -43,6 +44,7 @@ public class BillController {
     }
 
     @PutMapping
+    @Transactional
     public ResponseEntity<DtoBillResponse> updateBill(@RequestBody @Valid DtoBillUpdate bill) {
 
         var updatedBill = billService.updateBill(bill);

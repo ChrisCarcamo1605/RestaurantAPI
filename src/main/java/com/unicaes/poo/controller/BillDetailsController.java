@@ -1,7 +1,8 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.domain.bill.IBillService;
+import com.unicaes.poo.domain.bill.interfaces.IBillService;
 import com.unicaes.poo.domain.bill.dto.*;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class BillDetailsController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<DtoBillDetailsResponse> create(@RequestBody @Valid DtoBillDetailsSave dto,
                                                          UriComponentsBuilder uriBuilder) {
 
@@ -38,6 +40,7 @@ public class BillDetailsController {
     }
 
     @PutMapping("/{id}")
+    @Transactional
     public ResponseEntity<DtoBillDetailsResponse> update(
             @PathVariable Long id,
             @RequestBody DtoBillDetailsUpdate dto) {

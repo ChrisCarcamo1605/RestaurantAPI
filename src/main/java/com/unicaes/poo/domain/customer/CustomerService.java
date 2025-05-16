@@ -1,6 +1,8 @@
 package com.unicaes.poo.domain.customer;
 
 import com.unicaes.poo.domain.customer.dto.*;
+import com.unicaes.poo.domain.customer.interfaces.CustomerRepository;
+import com.unicaes.poo.domain.customer.interfaces.ICustomerService;
 import com.unicaes.poo.infra.exceptions.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

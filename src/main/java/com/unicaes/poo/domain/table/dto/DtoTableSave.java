@@ -9,7 +9,7 @@ public record DtoTableSave(
         @NotBlank
         String number,
         @NotNull
-        @Size(max = 3, message = "Name must be ≤ 3 characters")
+        @Size(max = 3,min = 2, message = "Name must be ≤ 3 characters")
         Integer capacity) {
 
 

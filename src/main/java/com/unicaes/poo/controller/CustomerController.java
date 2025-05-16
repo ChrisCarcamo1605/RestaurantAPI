@@ -1,7 +1,8 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.domain.customer.ICustomerService;
+import com.unicaes.poo.domain.customer.interfaces.ICustomerService;
 import com.unicaes.poo.domain.customer.dto.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ public class CustomerController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<DtoCustomerResponse> save(@RequestBody DtoCustomerSave dto, UriComponentsBuilder uriBuilder) {
         var customer = clienteService.save(dto);
         URI uri = uriBuilder.buildAndExpand(customer.id()).toUri();
@@ -43,6 +45,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
+    @Transactional
     public ResponseEntity<DtoCustomerResponse> update(@PathVariable Long id, @RequestBody DtoCustomerUpdate dto) {
         var customer = clienteService.update(id, dto);
         return ResponseEntity.accepted().body(customer);

@@ -3,6 +3,8 @@ package com.unicaes.poo.domain.reservation;
 import com.unicaes.poo.domain.reservation.dto.DtoSaveReservation;
 import com.unicaes.poo.domain.reservation.dto.DtoUpdateReservation;
 import com.unicaes.poo.domain.reservation.dto.DtoReservationResponse;
+import com.unicaes.poo.domain.reservation.interfaces.IReservation;
+import com.unicaes.poo.domain.reservation.interfaces.ReservationRepository;
 import com.unicaes.poo.infra.exceptions.QueryException;
 import org.springframework.stereotype.Service;
 

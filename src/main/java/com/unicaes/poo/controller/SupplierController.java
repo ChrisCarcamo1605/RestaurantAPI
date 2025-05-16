@@ -5,6 +5,7 @@ import com.unicaes.poo.domain.supplier.dto.DtoSupplierList;
 import com.unicaes.poo.domain.supplier.dto.DtoSupplierSave;
 import com.unicaes.poo.domain.supplier.dto.DtoSuppliersResponse;
 import com.unicaes.poo.domain.supplier.dto.DtoUpdateSupplier;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,7 @@ public class SupplierController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<DtoSuppliersResponse> createSupplier(
             @Valid @RequestBody DtoSupplierSave dto,
             UriComponentsBuilder uriBuilder) {
@@ -54,6 +56,7 @@ public class SupplierController {
     }
 
     @PutMapping("/{id}")
+    @Transactional
     public ResponseEntity<DtoSuppliersResponse> updateSupplier(
             @PathVariable Long id,
             @Valid @RequestBody DtoUpdateSupplier dto) {

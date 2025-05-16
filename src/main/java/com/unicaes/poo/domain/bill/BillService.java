@@ -2,10 +2,12 @@ package com.unicaes.poo.domain.bill;
 
 
 import com.unicaes.poo.domain.bill.dto.*;
-import com.unicaes.poo.domain.customer.CustomerRepository;
-import com.unicaes.poo.domain.products.ProductRepository;
-import com.unicaes.poo.domain.user.UserRepository;
-import com.unicaes.poo.infra.exceptions.EntityNotFoundException;
+import com.unicaes.poo.domain.bill.interfaces.BillDetailsRepository;
+import com.unicaes.poo.domain.bill.interfaces.BillRepository;
+import com.unicaes.poo.domain.bill.interfaces.IBillService;
+import com.unicaes.poo.domain.customer.interfaces.CustomerRepository;
+import com.unicaes.poo.domain.products.interfaces.ProductRepository;
+import com.unicaes.poo.domain.user.interfaces.UserRepository;
 import com.unicaes.poo.infra.exceptions.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -118,7 +120,7 @@ public class BillService implements IBillService {
         try {
             return billDetailsRepository.findActiveById(id)
                     .map(DtoBillDetailsResponse::fromEntity)
-                    .orElseThrow(() -> new EntityNotFoundException("Bill detail not found with id: " + id));
+                    .orElseThrow(() -> new QueryException("Bill detail not found with id: " + id));
         } catch (QueryException e) {
 
             throw new QueryException(e.getMessage());

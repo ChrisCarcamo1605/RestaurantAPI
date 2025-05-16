@@ -5,6 +5,7 @@ import com.unicaes.poo.domain.sale.dto.DtoSaleList;
 import com.unicaes.poo.domain.sale.dto.DtoSaveSale;
 import com.unicaes.poo.domain.sale.SaleService;
 import com.unicaes.poo.domain.sale.dto.DtoUpdateSale;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ public class SaleController {
     private SaleService saleService;
 
     @PostMapping
+    @Transactional
     public ResponseEntity<DtoSaleResponse> addSale(@Valid @RequestBody DtoSaveSale dto, UriComponentsBuilder uriBuilder) {
         var sale = saleService.save(dto);
         var response = new DtoSaleResponse(sale.getIdSale(), sale.getIdBill());
@@ -35,6 +37,7 @@ public class SaleController {
     }
 
     @PutMapping("/{id}")
+    @Transactional
     public ResponseEntity<DtoSaleResponse> updateSale(@PathVariable Long id, @Valid @RequestBody DtoUpdateSale dto) {
         var sale = saleService.updateSale(id, dto);
         return ResponseEntity.accepted().body(new DtoSaleResponse(sale.getIdSale(), sale.getIdBill()));

@@ -4,6 +4,7 @@ import com.unicaes.poo.domain.reservation.dto.DtoReservationResponse;
 import com.unicaes.poo.domain.reservation.dto.DtoSaveReservation;
 import com.unicaes.poo.domain.reservation.dto.DtoUpdateReservation;
 import com.unicaes.poo.domain.reservation.ReservationService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ public class ReservationController {
     private ReservationService reservationService;
 
     @PostMapping
+    @Transactional
     public ResponseEntity<DtoReservationResponse> saveReservation(@RequestBody DtoSaveReservation dtoSaveReservation) {
         var reservationResponse = reservationService.saveReservation(dtoSaveReservation);
         return ResponseEntity.status(201).body(reservationResponse);
@@ -36,6 +38,7 @@ public class ReservationController {
     }
 
     @PutMapping("/{id}")
+    @Transactional
     public ResponseEntity<DtoReservationResponse> updateReservation(@PathVariable Long id, @RequestBody DtoUpdateReservation dtoUpdateReservation) {
         var updatedReservation = reservationService.updateReservation(id, dtoUpdateReservation);
         return ResponseEntity.accepted().body(updatedReservation);

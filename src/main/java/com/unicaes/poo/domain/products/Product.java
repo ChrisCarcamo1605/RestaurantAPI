@@ -23,7 +23,7 @@ public class Product {
     @Column(name = "price_cost")
     private BigDecimal priceCost;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_type")
     private ProductType productType;
 

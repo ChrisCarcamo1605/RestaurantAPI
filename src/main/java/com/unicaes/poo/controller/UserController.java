@@ -1,11 +1,11 @@
 package com.unicaes.poo.controller;
 
 
-import com.unicaes.poo.domain.measurementUnit.MeasurementUnit;
-import com.unicaes.poo.domain.user.IUserService;
+import com.unicaes.poo.domain.user.interfaces.IUserService;
 import com.unicaes.poo.domain.user.dtos.DtoSaveUser;
 import com.unicaes.poo.domain.user.dtos.DtoUserResponse;
 import com.unicaes.poo.domain.user.dtos.DtoUserUpdate;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +38,7 @@ public class UserController {
     }
 
     @PutMapping
+    @Transactional
     public ResponseEntity<DtoUserResponse> updateUser(@Valid @RequestBody DtoUserUpdate dto) {
 
         var user = userService.updateUser(dto);
@@ -45,6 +46,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
