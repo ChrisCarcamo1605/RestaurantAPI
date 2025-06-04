@@ -12,8 +12,7 @@ public record DtoUpdateProduct(
                                BigDecimal priceCost,
                                BigDecimal priceSell,
                                MeasurementUnit measurementUnit,
-                               String description,
-                               @Email
-                               String email
+                               String description
+
 ) {
 }

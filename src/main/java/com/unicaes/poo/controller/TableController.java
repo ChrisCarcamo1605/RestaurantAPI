@@ -2,6 +2,7 @@ package com.unicaes.poo.controller;
 
 import com.unicaes.poo.interfaces.table.ITableService;
 import com.unicaes.poo.domain.table.dto.*;
+import com.unicaes.poo.payload.MessageResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,27 +20,31 @@ public class TableController {
     private ITableService mesaService;
 
     @GetMapping
-    public ResponseEntity<List<DtoTableList>> findAll() {
-        return ResponseEntity.ok().body(mesaService.findAll());
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok().body(MessageResponse.builder()
+                .message("Mesas obtenidas correctamente").data(mesaService.findAll()).build());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DtoTableResponse> findById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(mesaService.findById(id));
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+
+        return ResponseEntity.ok().body(MessageResponse.builder().message("Mesa obtenida exitosamente").data(mesaService.findById(id)).build());
     }
 
     @PostMapping
     @Transactional
-    public ResponseEntity<DtoTableResponse> save(@RequestBody DtoTableSave dto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<?> save(@RequestBody DtoTableSave dto, UriComponentsBuilder uriBuilder) {
         var table = mesaService.save(dto);
         URI uri = uriBuilder.path("/tables/{id}").buildAndExpand(table.id()).toUri();
-        return ResponseEntity.created(uri).body(table);
+        return ResponseEntity.created(uri)
+                .body(MessageResponse.builder().message("Mesa agregada exitosamente").data(table).build());
     }
 
     @PutMapping
     @Transactional
-    public ResponseEntity<DtoTableResponse> update(@RequestBody DtoTableUpdate dto) {
-        return ResponseEntity.accepted().body(mesaService.update(dto));
+    public ResponseEntity<?> update(@RequestBody DtoTableUpdate dto) {
+        return ResponseEntity.accepted().body(MessageResponse.builder()
+                .message("Mesas actualizadas exitosamente").data(mesaService.update(dto)).build());
     }
 
     @DeleteMapping("/{id}")

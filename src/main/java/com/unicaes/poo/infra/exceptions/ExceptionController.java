@@ -29,7 +29,6 @@ public class ExceptionController {
     @ExceptionHandler(QueryException.class)
     public ResponseEntity queryValidation(QueryException ex) {
 
-        System.out.println("YO SOY ");
         var errorResponse = new DatosErrores(
                 HttpStatus.BAD_REQUEST.value(), "ERROR AL CREAR CONSULTA",
                 ex.getMessage());

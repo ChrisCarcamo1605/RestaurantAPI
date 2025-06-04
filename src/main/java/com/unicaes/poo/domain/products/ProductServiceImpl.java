@@ -87,7 +87,11 @@ public class ProductServiceImpl implements ProductService {
             if (dto.description() != null) {
                 product.setDescription(dto.description());
             }
-            return DtoProductResponse.fromEntity(productRepository.save(product));
+
+
+            var newProd = productRepository.save(product);
+            System.out.printf("si actualiza");
+            return DtoProductResponse.fromEntity(newProd);
 
         } catch (Exception e) {
             throw new QueryException(e.getMessage());

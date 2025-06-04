@@ -5,6 +5,7 @@ import com.unicaes.poo.domain.products.dto.DtoProductResponse;
 import com.unicaes.poo.domain.products.dto.DtoSaveProduct;
 import com.unicaes.poo.domain.products.ProductServiceImpl;
 import com.unicaes.poo.domain.products.dto.DtoUpdateProduct;
+import com.unicaes.poo.interfaces.products.ProductService;
 import com.unicaes.poo.payload.MessageResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    private ProductServiceImpl productService;
+    private ProductService productService;
 
     @PostMapping
     public ResponseEntity<?> addProduct(@Valid @RequestBody DtoSaveProduct dto, UriComponentsBuilder uriBuilder) {
@@ -32,7 +33,7 @@ public class ProductController {
         return ResponseEntity.created(uri).body(MessageResponse.builder().message("Producto añadido correctamente").data(product).build());
     }
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<?> getProductsList( Pageable pageable) {
         var products = productService.getProductsList(pageable);
         return ResponseEntity.ok(MessageResponse.builder().message("Productos conseguidos correctamente").data(products).build());
@@ -45,7 +46,9 @@ public class ProductController {
 
         URI uri = uriBuilder.path("product").buildAndExpand(product.id()).toUri();
 
-        return ResponseEntity.accepted().body(MessageResponse.builder().message("Producto actualizado correctamente").data(product));
+        System.out.println(product.name());
+        return ResponseEntity.accepted().body(
+                MessageResponse.builder().message("Producto actualizado correctamente").data(product).build());
     }
 
     @DeleteMapping("/{id}")
