@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ReservationService implements IReservation {
+public class ReservationServiceImpl implements IReservation {
 
     private final ReservationRepository reservationRepository;
 
-    public ReservationService(ReservationRepository reservationRepository) {
+    public ReservationServiceImpl(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
     }
 
