@@ -4,7 +4,7 @@ import com.unicaes.poo.domain.customer.dto.*;
 
 import java.util.List;
 
-public interface CustomerService {
+public interface ICustomerService {
     List<DtoCustomerList> findAll();
     DtoCustomerResponse findById(Long id);
     DtoCustomerResponse save(DtoCustomerSave dto);

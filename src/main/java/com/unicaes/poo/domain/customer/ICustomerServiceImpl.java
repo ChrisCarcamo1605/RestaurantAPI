@@ -1,6 +1,7 @@
 package com.unicaes.poo.domain.customer;
 
 import com.unicaes.poo.domain.customer.dto.*;
+import com.unicaes.poo.interfaces.customer.ICustomerService;
 import com.unicaes.poo.repository.CustomerRepository;
 import com.unicaes.poo.infra.exceptions.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CustomerService implements com.unicaes.poo.interfaces.customer.CustomerService {
+public class ICustomerServiceImpl implements ICustomerService {
 
     @Autowired
     private CustomerRepository clienteRepository;

@@ -24,8 +24,7 @@ public class TableController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DtoTableResponse> findById(@PathVariable Long id, UriComponentsBuilder uriBuilder) {
-
+    public ResponseEntity<DtoTableResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok().body(mesaService.findById(id));
     }
 
@@ -34,11 +33,10 @@ public class TableController {
     public ResponseEntity<DtoTableResponse> save(@RequestBody DtoTableSave dto, UriComponentsBuilder uriBuilder) {
         var table = mesaService.save(dto);
         URI uri = uriBuilder.path("/tables/{id}").buildAndExpand(table.id()).toUri();
-
         return ResponseEntity.created(uri).body(table);
     }
 
-    @PutMapping()
+    @PutMapping
     @Transactional
     public ResponseEntity<DtoTableResponse> update(@RequestBody DtoTableUpdate dto) {
         return ResponseEntity.accepted().body(mesaService.update(dto));
@@ -46,7 +44,7 @@ public class TableController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-
+        mesaService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
