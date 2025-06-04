@@ -6,7 +6,7 @@ import com.unicaes.poo.domain.user.dtos.DtoUserUpdate;
 
 import java.util.List;
 
-public interface UserService extends IUserType {
+public interface UserService extends UserType {
 
     DtoUserResponse saveUser(DtoSaveUser dto);
 

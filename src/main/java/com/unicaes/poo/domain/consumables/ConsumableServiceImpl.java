@@ -2,7 +2,7 @@ package com.unicaes.poo.domain.consumables;
 
 import com.unicaes.poo.domain.consumables.dto.*;
 import com.unicaes.poo.repository.ConsumableRepository;
-import com.unicaes.poo.interfaces.consumable.IConsumable;
+import com.unicaes.poo.interfaces.consumable.Consumable;
 import com.unicaes.poo.domain.supplier.Supplier;
 import com.unicaes.poo.repository.SupplierRepository;
 import com.unicaes.poo.infra.exceptions.QueryException;
@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ConsumableService implements IConsumable {
+public class ConsumableServiceImpl implements Consumable {
 
     private final ConsumableRepository consumableRepository;
     private final SupplierRepository supplierRepository;
@@ -29,7 +29,7 @@ public class ConsumableService implements IConsumable {
                 .orElseThrow(() -> new QueryException("Proveedor no encontrado con ID: " + dto.supplierId()));
 
         try {
-            Consumable consumable = new Consumable();
+            com.unicaes.poo.domain.consumables.Consumable consumable = new com.unicaes.poo.domain.consumables.Consumable();
             consumable.setName(dto.name());
             consumable.setPrice(BigDecimal.valueOf(dto.price()));
             consumable.setStock(dto.stock());
@@ -38,7 +38,7 @@ public class ConsumableService implements IConsumable {
             consumable.setMeasurementUnit(dto.measurementUnit());
             consumable.setActive(true);
 
-            Consumable savedConsumable = consumableRepository.save(consumable);
+            com.unicaes.poo.domain.consumables.Consumable savedConsumable = consumableRepository.save(consumable);
             return convertToResponseDto(savedConsumable);
         } catch (Exception e) {
             throw new QueryException("Error al crear el consumible: " + e.getMessage());
@@ -48,7 +48,7 @@ public class ConsumableService implements IConsumable {
     @Override
     @Transactional
     public void deactivateConsumable(Long id) {
-        Consumable consumable = consumableRepository.findById(id)
+        com.unicaes.poo.domain.consumables.Consumable consumable = consumableRepository.findById(id)
                 .orElseThrow(() -> new QueryException("Consumible no encontrado con ID: " + id));
 
         try {
@@ -62,7 +62,7 @@ public class ConsumableService implements IConsumable {
     @Override
     @Transactional
     public DtoConsumableResponse updateConsumable(Long id, DtoConsumableUpdate dto) {
-        Consumable consumable = consumableRepository.findById(id)
+        com.unicaes.poo.domain.consumables.Consumable consumable = consumableRepository.findById(id)
                 .orElseThrow(() -> new QueryException("Consumible no encontrado con ID: " + id));
 
         try {
@@ -77,7 +77,7 @@ public class ConsumableService implements IConsumable {
                 consumable.setSupplier(supplier);
             }
 
-            Consumable updatedConsumable = consumableRepository.save(consumable);
+            com.unicaes.poo.domain.consumables.Consumable updatedConsumable = consumableRepository.save(consumable);
             return convertToResponseDto(updatedConsumable);
         } catch (Exception e) {
             throw new QueryException("Error al actualizar el consumible: " + e.getMessage());
@@ -94,7 +94,7 @@ public class ConsumableService implements IConsumable {
         }
     }
 
-    private DtoConsumableResponse convertToResponseDto(Consumable consumable) {
+    private DtoConsumableResponse convertToResponseDto(com.unicaes.poo.domain.consumables.Consumable consumable) {
         return new DtoConsumableResponse(
                 consumable.getId(),
                 consumable.getName(),
@@ -107,7 +107,7 @@ public class ConsumableService implements IConsumable {
         );
     }
 
-    private DtoConsumableList convertToListDto(Consumable consumable) {
+    private DtoConsumableList convertToListDto(com.unicaes.poo.domain.consumables.Consumable consumable) {
         return new DtoConsumableList(
                 consumable.getId(),
                 consumable.getName(),

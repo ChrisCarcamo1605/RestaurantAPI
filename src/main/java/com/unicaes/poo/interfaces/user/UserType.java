@@ -6,7 +6,7 @@ import com.unicaes.poo.domain.user.dtos.DtoUserTypeUpdate;
 
 import java.util.List;
 
-public interface IUserType {
+public interface UserType {
 
     DtoUserTypeResponse saveType(DtoSaveType dto);
 

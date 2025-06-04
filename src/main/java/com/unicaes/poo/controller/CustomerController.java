@@ -1,6 +1,6 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.interfaces.customer.ICustomerService;
+import com.unicaes.poo.interfaces.customer.CustomerService;
 import com.unicaes.poo.domain.customer.dto.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +17,7 @@ public class CustomerController {
 
 
     @Autowired
-    private ICustomerService clienteService;
-
-
-//
-//    public ClienteController(IClienteService clienteService) {
-//        this.clienteService = clienteService;
-//    }
+    private CustomerService clienteService;
 
     @GetMapping
     public ResponseEntity<List<DtoCustomerList>> findAll() {

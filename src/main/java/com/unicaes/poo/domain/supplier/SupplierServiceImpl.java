@@ -4,7 +4,7 @@ import com.unicaes.poo.domain.supplier.dto.DtoSupplierList;
 import com.unicaes.poo.domain.supplier.dto.DtoSupplierSave;
 import com.unicaes.poo.domain.supplier.dto.DtoSuppliersResponse;
 import com.unicaes.poo.domain.supplier.dto.DtoUpdateSupplier;
-import com.unicaes.poo.interfaces.supplier.ISupplier;
+import com.unicaes.poo.interfaces.supplier.Supplier;
 import com.unicaes.poo.repository.SupplierRepository;
 import com.unicaes.poo.infra.exceptions.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,25 +13,25 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SupplierService implements ISupplier {
+public class SupplierServiceImpl implements Supplier {
 
     private final SupplierRepository supplierRepository;
 
     @Autowired
-    public SupplierService(SupplierRepository supplierRepository) {
+    public SupplierServiceImpl(SupplierRepository supplierRepository) {
         this.supplierRepository = supplierRepository;
     }
 
     @Override
     public DtoSuppliersResponse createSupplier(DtoSupplierSave dto) {
         try {
-            Supplier supplier = new Supplier();
+            com.unicaes.poo.domain.supplier.Supplier supplier = new com.unicaes.poo.domain.supplier.Supplier();
             supplier.setName(dto.name());
             supplier.setContact(dto.contact());
             supplier.setAddress(dto.address());
             supplier.setActive(true);
 
-            Supplier savedSupplier = supplierRepository.save(supplier);
+            com.unicaes.poo.domain.supplier.Supplier savedSupplier = supplierRepository.save(supplier);
             return convertToResponseDto(savedSupplier);
         } catch (Exception e) {
             throw new QueryException("Error creating supplier: " + e.getMessage());
@@ -41,7 +41,7 @@ public class SupplierService implements ISupplier {
     @Override
     public DtoSuppliersResponse getSupplierById(Long id) {
         try {
-            Supplier supplier = supplierRepository.findById(id)
+            com.unicaes.poo.domain.supplier.Supplier supplier = supplierRepository.findById(id)
                     .orElseThrow(() -> new QueryException("Supplier not found with id: " + id));
             return convertToResponseDto(supplier);
 
@@ -53,7 +53,7 @@ public class SupplierService implements ISupplier {
     @Override
     public void deactivateSupplier(long id) {
         try {
-            Supplier supplier = supplierRepository.findById(id)
+            com.unicaes.poo.domain.supplier.Supplier supplier = supplierRepository.findById(id)
                     .orElseThrow(() -> new QueryException("Supplier not found with id: " + id));
 
             if (!supplier.isActive()) {
@@ -81,7 +81,7 @@ public class SupplierService implements ISupplier {
     @Override
     public DtoSuppliersResponse updateSupplier(Long id, DtoUpdateSupplier dto) {
         try {
-            Supplier supplier = supplierRepository.findById(id)
+            com.unicaes.poo.domain.supplier.Supplier supplier = supplierRepository.findById(id)
                     .orElseThrow(() -> new QueryException("Supplier not found with id: " + id));
 
             // Actualización parcial - solo campos no nulos
@@ -95,14 +95,14 @@ public class SupplierService implements ISupplier {
                 supplier.setAddress(dto.address());
             }
 
-            Supplier updatedSupplier = supplierRepository.save(supplier);
+            com.unicaes.poo.domain.supplier.Supplier updatedSupplier = supplierRepository.save(supplier);
             return convertToResponseDto(updatedSupplier);
         } catch (Exception e) {
             throw new QueryException("Error updating supplier: " + e.getMessage());
         }
     }
 
-    private DtoSuppliersResponse convertToResponseDto(Supplier supplier) {
+    private DtoSuppliersResponse convertToResponseDto(com.unicaes.poo.domain.supplier.Supplier supplier) {
         return new DtoSuppliersResponse(
                 supplier.getSupplierId(),
                 supplier.getName(),
@@ -112,7 +112,7 @@ public class SupplierService implements ISupplier {
         );
     }
 
-    private DtoSupplierList convertToListDto(Supplier supplier) {
+    private DtoSupplierList convertToListDto(com.unicaes.poo.domain.supplier.Supplier supplier) {
         return new DtoSupplierList(
                 supplier.getSupplierId(),
                 supplier.getName(),

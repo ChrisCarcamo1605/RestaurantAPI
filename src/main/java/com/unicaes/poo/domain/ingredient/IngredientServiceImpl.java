@@ -3,7 +3,7 @@ package com.unicaes.poo.domain.ingredient;
 import com.unicaes.poo.domain.consumables.Consumable;
 import com.unicaes.poo.repository.ConsumableRepository;
 import com.unicaes.poo.domain.ingredient.dto.*;
-import com.unicaes.poo.interfaces.ingredient.IIngredient;
+import com.unicaes.poo.interfaces.ingredient.Ingredient;
 import com.unicaes.poo.repository.IngredientRepository;
 import com.unicaes.poo.domain.products.Product;
 import com.unicaes.poo.repository.ProductRepository;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class IngredientService implements IIngredient {
+public class IngredientServiceImpl implements Ingredient {
 
     private final IngredientRepository ingredientRepository;
     private final ConsumableRepository consumableRepository;
@@ -36,12 +36,12 @@ public class IngredientService implements IIngredient {
         }
 
         try {
-            Ingredient ingredient = new Ingredient();
+            com.unicaes.poo.domain.ingredient.Ingredient ingredient = new com.unicaes.poo.domain.ingredient.Ingredient();
             ingredient.setConsumable(consumable);
             ingredient.setQuantity(dto.quantity());
             ingredient.setProduct(product);
 
-            Ingredient savedIngredient = ingredientRepository.save(ingredient);
+            com.unicaes.poo.domain.ingredient.Ingredient savedIngredient = ingredientRepository.save(ingredient);
             return toResponseDto(savedIngredient);
         } catch (Exception e) {
             throw new QueryException("Error al guardar el ingrediente: " + e.getMessage());
@@ -61,7 +61,7 @@ public class IngredientService implements IIngredient {
     @Override
     @Transactional
     public DtoIngredientResponse updateIngredient(Long id, DtoIngredientUpdate dto) {
-        Ingredient ingredient = ingredientRepository.findById(id)
+        com.unicaes.poo.domain.ingredient.Ingredient ingredient = ingredientRepository.findById(id)
                 .orElseThrow(() -> new QueryException("Ingrediente no encontrado con ID: " + id));
 
         try {
@@ -84,11 +84,17 @@ public class IngredientService implements IIngredient {
                 ingredient.setProduct(product);
             }
 
-            Ingredient updatedIngredient = ingredientRepository.save(ingredient);
+            com.unicaes.poo.domain.ingredient.Ingredient updatedIngredient = ingredientRepository.save(ingredient);
             return toResponseDto(updatedIngredient);
         } catch (Exception e) {
             throw new QueryException("Error al actualizar el ingrediente: " + e.getMessage());
         }
+    }
+
+    @Override
+    public DtoIngredientResponse getIngredient(Long id) {
+        var ingredient = ingredientRepository.findById(id);
+        return  new DtoIngredientResponse(ingredient.get());
     }
 
     @Override
@@ -105,7 +111,7 @@ public class IngredientService implements IIngredient {
         }
     }
 
-    private DtoIngredientResponse toResponseDto(Ingredient ingredient) {
+    private DtoIngredientResponse toResponseDto(com.unicaes.poo.domain.ingredient.Ingredient ingredient) {
         return new DtoIngredientResponse(
                 ingredient.getId(),
                 ingredient.getConsumable().getId(),

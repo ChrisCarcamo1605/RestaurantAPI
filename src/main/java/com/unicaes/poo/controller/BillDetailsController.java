@@ -1,9 +1,9 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.interfaces.bill.IBillService;
+import com.unicaes.poo.interfaces.bill.BillService;
 import com.unicaes.poo.domain.bill.dto.*;
+import com.unicaes.poo.payload.MessageResponse;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,33 +18,60 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BillDetailsController {
     @Autowired
-    private IBillService billService;
+    private BillService billService;
 
-    @GetMapping
-    public List<DtoBillDetailsList> getAllActive() {
-        return billService.getAllActive();
+    @GetMapping("/active")
+    public ResponseEntity<?> getAllActive() {
+        List<DtoBillDetailsList> activeBills = billService.getAllActive();
+        return ResponseEntity.ok(MessageResponse.<List<DtoBillDetailsList>>builder()
+                .message("Detalles de facturas activas recuperados exitosamente")
+                .data(activeBills)
+                .build());
     }
 
     @GetMapping("/{id}")
-    public DtoBillDetailsResponse getById(@PathVariable Long id) {
-        return billService.getById(id);
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        DtoBillDetailsResponse billDetail = billService.getById(id);
+        if (billDetail == null) {
+            return ResponseEntity.status(404).body(MessageResponse.<DtoBillDetailsResponse>builder()
+                    .message("Detalle de factura no encontrado con ID: " + id)
+                    .data(null)
+                    .build());
+        }
+        return ResponseEntity.ok(MessageResponse.<DtoBillDetailsResponse>builder()
+                .message("Detalle de factura recuperado exitosamente")
+                .data(billDetail)
+                .build());
     }
 
     @PostMapping
     @Transactional
-    public ResponseEntity<DtoBillDetailsResponse> create(@RequestBody @Valid DtoBillDetailsSave dto,
-                                                         UriComponentsBuilder uriBuilder) {
-
-        URI uri = uriBuilder.path("/bill-details/{id}").buildAndExpand(dto.billId()).toUri();
-        return ResponseEntity.created(uri).body(billService.save(dto));
+    public ResponseEntity<?> create(@RequestBody DtoBillDetailsSave dto,
+                                    UriComponentsBuilder uriBuilder) {
+        DtoBillDetailsResponse createdBillDetail = billService.save(dto);
+        URI uri = uriBuilder.path("/bill-details/{id}").buildAndExpand(createdBillDetail.id()).toUri();
+        return ResponseEntity.created(uri).body(MessageResponse.<DtoBillDetailsResponse>builder()
+                .message("Detalle de factura creado exitosamente")
+                .data(createdBillDetail)
+                .build());
     }
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<DtoBillDetailsResponse> update(
+    public ResponseEntity<?> update(
             @PathVariable Long id,
             @RequestBody DtoBillDetailsUpdate dto) {
-        return ResponseEntity.accepted().body(billService.update(dto.withId(id)));
+        DtoBillDetailsResponse updatedBillDetail = billService.update(dto.withId(id));
+        if (updatedBillDetail == null) {
+            return ResponseEntity.status(404).body(MessageResponse.<DtoBillDetailsResponse>builder()
+                    .message("Detalle de factura no encontrado para actualizar con ID: " + id)
+                    .data(null)
+                    .build());
+        }
+        return ResponseEntity.accepted().body(MessageResponse.<DtoBillDetailsResponse>builder()
+                .message("Detalle de factura actualizado exitosamente")
+                .data(updatedBillDetail)
+                .build());
     }
 
     @DeleteMapping("/{id}")

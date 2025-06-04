@@ -7,7 +7,7 @@ import com.unicaes.poo.domain.supplier.dto.DtoUpdateSupplier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface ISupplier {
+public interface Supplier {
     DtoSuppliersResponse createSupplier(DtoSupplierSave dto);
     DtoSuppliersResponse getSupplierById(Long id);
     void deactivateSupplier(long id);

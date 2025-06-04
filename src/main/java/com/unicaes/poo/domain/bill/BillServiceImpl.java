@@ -3,7 +3,7 @@ package com.unicaes.poo.domain.bill;
 
 import com.unicaes.poo.domain.bill.dto.*;
 import com.unicaes.poo.repository.BillDetailsRepository;
-import com.unicaes.poo.interfaces.bill.IBillService;
+import com.unicaes.poo.interfaces.bill.BillService;
 import com.unicaes.poo.repository.CustomerRepository;
 import com.unicaes.poo.repository.ProductRepository;
 import com.unicaes.poo.repository.UserRepository;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class BillServiceImpl implements IBillService {
+public class BillServiceImpl implements BillService {
 
     @Autowired
     private BillRepository billRepository;

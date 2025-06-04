@@ -4,6 +4,7 @@ import com.unicaes.poo.interfaces.products.ProductService;
 import com.unicaes.poo.domain.products.dto.DtoSaveType;
 import com.unicaes.poo.domain.products.dto.DtoTypeResponse;
 import com.unicaes.poo.domain.products.dto.DtoUpdateType;
+import com.unicaes.poo.payload.MessageResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,25 +24,27 @@ public class ProductTypeController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<DtoTypeResponse> addProductType(@RequestBody DtoSaveType type,
+    public ResponseEntity<?> addProductType(@RequestBody DtoSaveType type,
                                                           UriComponentsBuilder uriBuilder) {
 
         var newType = productService.save(type.name());
         URI uri = uriBuilder.path("/product_type/{id}").buildAndExpand(newType.id()).toUri();
-        return ResponseEntity.created(uri).body(newType);
+        return ResponseEntity.created(uri).body(MessageResponse.builder().message("Producto añadido").data(newType).build());
     }
 
+
     @GetMapping
-    public ResponseEntity<List<DtoTypeResponse>> findAll() {
+    public ResponseEntity<?> findAll() {
         var productTypes = productService.findAll();
-        return ResponseEntity.ok(productTypes);
+        return ResponseEntity.ok(MessageResponse.<List<DtoTypeResponse>>builder().message("Tipos de producto recuperados exitosamente").data(productTypes).build());
     }
 
     @PutMapping
     @Transactional
-    public ResponseEntity<DtoTypeResponse> updateType(@RequestBody DtoUpdateType type) {
-        var productTypes = productService.update(type.id(), type.name());
-        return ResponseEntity.accepted().body(productTypes);
+    public ResponseEntity<?> updateType(@RequestBody DtoUpdateType type) {
+        var updatedProductType = productService.update(type.id(), type.name());
+        return ResponseEntity.accepted().body(MessageResponse.<DtoTypeResponse>builder().message("Tipo de producto actualizado exitosamente").data(updatedProductType).build());
+
     }
 
     @DeleteMapping("/{id}")

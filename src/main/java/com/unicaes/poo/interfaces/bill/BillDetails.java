@@ -4,7 +4,7 @@ import com.unicaes.poo.domain.bill.dto.*;
 
 import java.util.List;
 
-public interface IBillDetails {
+public interface BillDetails {
     List<DtoBillDetailsList> getAllActive();
     DtoBillDetailsResponse getById(Long id);
     DtoBillDetailsResponse save(DtoBillDetailsSave dto);

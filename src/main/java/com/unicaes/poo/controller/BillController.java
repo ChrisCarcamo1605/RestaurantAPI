@@ -1,10 +1,10 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.interfaces.bill.IBillService;
+import com.unicaes.poo.interfaces.bill.BillService;
 import com.unicaes.poo.domain.bill.dto.DtoBillList;
-import com.unicaes.poo.domain.bill.dto.DtoBillResponse;
 import com.unicaes.poo.domain.bill.dto.DtoBillSave;
 import com.unicaes.poo.domain.bill.dto.DtoBillUpdate;
+import com.unicaes.poo.payload.MessageResponse;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class BillController {
 
 
     @Autowired
-    private IBillService billService;
+    private BillService billService;
 
 
     @GetMapping
@@ -34,21 +34,23 @@ public class BillController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<DtoBillResponse> createBill(@RequestBody @Valid DtoBillSave bill, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<?> createBill(@RequestBody @Valid DtoBillSave bill, UriComponentsBuilder ucBuilder) {
 
         var newBill = billService.save(bill);
 
         System.out.println(newBill.emissionDate() + "HOY" + newBill.id());
         URI location = ucBuilder.path("bill").buildAndExpand(newBill.id()).toUri();
-        return ResponseEntity.created(location).body(newBill);
+
+
+        return ResponseEntity.created(location).body(MessageResponse.builder().message("bill creado correctamente").data(newBill).build());
     }
 
     @PutMapping
     @Transactional
-    public ResponseEntity<DtoBillResponse> updateBill(@RequestBody @Valid DtoBillUpdate bill) {
+    public ResponseEntity<?> updateBill(@RequestBody @Valid DtoBillUpdate bill) {
 
         var updatedBill = billService.updateBill(bill);
-        return ResponseEntity.accepted().body(updatedBill);
+        return ResponseEntity.accepted().body(MessageResponse.builder().message("Bill actualizado corectamente").data(updatedBill).build());
     }
 
     @DeleteMapping("/{id}")

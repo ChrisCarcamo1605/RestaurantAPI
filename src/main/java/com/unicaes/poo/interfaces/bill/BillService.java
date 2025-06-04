@@ -7,7 +7,7 @@ import com.unicaes.poo.domain.bill.dto.DtoBillUpdate;
 
 import java.util.List;
 
-public interface IBillService extends IBillDetails {
+public interface BillService extends BillDetails {
     List<DtoBillList> getAll();
     DtoBillResponse updateBill(DtoBillUpdate dto);
     DtoBillResponse save(DtoBillSave bill);

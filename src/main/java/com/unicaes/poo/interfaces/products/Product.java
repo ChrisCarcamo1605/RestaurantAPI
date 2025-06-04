@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface IProduct {
+public interface Product {
 
     DtoProductResponse save(DtoSaveProduct dto);
     List<DtoProductResponse> getProductsList(Pageable pageable);

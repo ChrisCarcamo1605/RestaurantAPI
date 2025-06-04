@@ -1,13 +1,12 @@
 package com.unicaes.poo.interfaces.products;
 
-import com.unicaes.poo.domain.products.Product;
 import com.unicaes.poo.domain.products.dto.DtoProductResponse;
 import com.unicaes.poo.domain.products.dto.DtoSaveProduct;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface ProductService extends IProduct, IType {
+public interface ProductService extends Product, ProductType {
     @Override
     DtoProductResponse save(DtoSaveProduct dto);
 
@@ -15,5 +14,5 @@ public interface ProductService extends IProduct, IType {
     List<DtoProductResponse> getProductsList(Pageable pageable);
 
 
-    List<Product> findPriceLess(double price);
+    List<com.unicaes.poo.domain.products.Product> findPriceLess(double price);
 }

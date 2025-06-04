@@ -1,9 +1,9 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.interfaces.consumable.IConsumable;
+import com.unicaes.poo.interfaces.consumable.Consumable;
 import com.unicaes.poo.domain.consumables.dto.*;
+import com.unicaes.poo.payload.MessageResponse;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -17,44 +17,69 @@ import java.net.URI;
 @RequestMapping("/consumable")
 public class ConsumableController {
 
-    private final IConsumable consumableService;
+    private final Consumable consumableService;
 
-    public ConsumableController(IConsumable consumableService) {
+    public ConsumableController(Consumable consumableService) {
         this.consumableService = consumableService;
     }
-
     @PostMapping
     @Transactional
-    public ResponseEntity<DtoConsumableResponse> createConsumable(
-            @Valid @RequestBody DtoConsumableSave dto,
-            UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<?> createConsumable(
+           @RequestBody DtoConsumableSave dto,
+                       UriComponentsBuilder uriBuilder) {
 
         DtoConsumableResponse response = consumableService.createConsumable(dto);
         URI uri = uriBuilder.path("/consumable/{id}")
                 .buildAndExpand(response.consumableId())
                 .toUri();
-        return ResponseEntity.created(uri).body(response);
+        return ResponseEntity.created(uri).body(
+                MessageResponse.<DtoConsumableResponse>builder()
+                        .message("Consumible creado exitosamente")
+                        .data(response)
+                        .build()
+        );
     }
 
     @PatchMapping("/{id}")
     @Transactional
-    public ResponseEntity<DtoConsumableResponse> updateConsumable(
+    public ResponseEntity<?> updateConsumable(
             @PathVariable Long id,
-            @Valid @RequestBody DtoConsumableUpdate dto) {
+         @RequestBody DtoConsumableUpdate dto) {
 
         DtoConsumableResponse response = consumableService.updateConsumable(id, dto);
-        return ResponseEntity.accepted().body(response);
+        if (response == null) {
+            return ResponseEntity.status(404).body(
+                    MessageResponse.<DtoConsumableResponse>builder()
+                            .message("Consumible no encontrado para actualizar con ID: " + id)
+                            .data(null)
+                            .build()
+            );
+        }
+        return ResponseEntity.accepted().body(
+                MessageResponse.<DtoConsumableResponse>builder()
+                        .message("Consumible actualizado exitosamente")
+                        .data(response)
+                        .build()
+        );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deactivateConsumable(@PathVariable Long id) {
-        consumableService.deactivateConsumable(id);
-        return ResponseEntity.noContent().build();
+    @Transactional
+    public ResponseEntity<?> deactivateConsumable(@PathVariable Long id) {
+      consumableService.deactivateConsumable(id);
+      return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<Page<DtoConsumableList>> getAllConsumables(
+    public ResponseEntity<?> getAllConsumables(
             @PageableDefault(size = 100) Pageable pageable) {
-        return ResponseEntity.ok(consumableService.getAllConsumable(pageable));
+        Page<DtoConsumableList> page = consumableService.getAllConsumable(pageable);
+        return ResponseEntity.ok(
+                MessageResponse.<Page<DtoConsumableList>>builder()
+                        .message("Consumibles recuperados exitosamente")
+                        .data(page)
+                        .build()
+        );
+
     }
 }
