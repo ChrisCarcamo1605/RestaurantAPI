@@ -1,7 +1,7 @@
 package com.unicaes.poo.controller;
 
 
-import com.unicaes.poo.domain.user.interfaces.IUserService;
+import com.unicaes.poo.interfaces.user.UserService;
 import com.unicaes.poo.domain.user.dtos.DtoSaveUser;
 import com.unicaes.poo.domain.user.dtos.DtoUserResponse;
 import com.unicaes.poo.domain.user.dtos.DtoUserUpdate;
@@ -20,7 +20,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    IUserService userService;
+    UserService userService;
 
     @PostMapping
     public ResponseEntity<DtoUserResponse> addUser(  @RequestBody @Valid DtoSaveUser dto, UriComponentsBuilder ucBuilder) {

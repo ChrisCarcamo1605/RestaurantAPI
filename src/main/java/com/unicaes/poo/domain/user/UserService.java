@@ -6,9 +6,8 @@ import com.unicaes.poo.domain.user.dtos.DtoSaveUser;
 import com.unicaes.poo.domain.user.dtos.DtoUserResponse;
 import com.unicaes.poo.domain.user.dtos.DtoUserTypeUpdate;
 import com.unicaes.poo.domain.user.dtos.DtoUserUpdate;
-import com.unicaes.poo.domain.user.interfaces.IUserService;
-import com.unicaes.poo.domain.user.interfaces.UserRepository;
-import com.unicaes.poo.domain.user.interfaces.UserTypeRepository;
+import com.unicaes.poo.repository.UserRepository;
+import com.unicaes.poo.repository.UserTypeRepository;
 import com.unicaes.poo.infra.exceptions.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements IUserService {
+public class UserService implements com.unicaes.poo.interfaces.user.UserService {
 
     @Autowired
     UserRepository userRepository;

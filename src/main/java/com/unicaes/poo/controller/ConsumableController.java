@@ -1,6 +1,6 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.domain.consumables.interfaces.IConsumable;
+import com.unicaes.poo.interfaces.consumable.IConsumable;
 import com.unicaes.poo.domain.consumables.dto.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;

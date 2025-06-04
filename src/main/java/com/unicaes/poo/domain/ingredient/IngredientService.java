@@ -1,12 +1,12 @@
 package com.unicaes.poo.domain.ingredient;
 
 import com.unicaes.poo.domain.consumables.Consumable;
-import com.unicaes.poo.domain.consumables.interfaces.ConsumableRepository;
+import com.unicaes.poo.repository.ConsumableRepository;
 import com.unicaes.poo.domain.ingredient.dto.*;
-import com.unicaes.poo.domain.ingredient.interfaces.IIngredient;
-import com.unicaes.poo.domain.ingredient.interfaces.IngredientRepository;
+import com.unicaes.poo.interfaces.ingredient.IIngredient;
+import com.unicaes.poo.repository.IngredientRepository;
 import com.unicaes.poo.domain.products.Product;
-import com.unicaes.poo.domain.products.interfaces.ProductRepository;
+import com.unicaes.poo.repository.ProductRepository;
 import com.unicaes.poo.infra.exceptions.QueryException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

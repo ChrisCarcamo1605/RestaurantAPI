@@ -1,7 +1,7 @@
 package com.unicaes.poo.controller;
 
 import com.unicaes.poo.domain.products.dto.DtoSaveType;
-import com.unicaes.poo.domain.user.interfaces.IUserService;
+import com.unicaes.poo.interfaces.user.UserService;
 import com.unicaes.poo.domain.user.dtos.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -18,7 +18,7 @@ import java.util.List;
 public class UserTypeController {
 
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @PostMapping
     @Transactional

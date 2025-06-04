@@ -3,13 +3,11 @@ package com.unicaes.poo.controller;
 
 import com.unicaes.poo.domain.products.dto.DtoProductResponse;
 import com.unicaes.poo.domain.products.dto.DtoSaveProduct;
-import com.unicaes.poo.domain.products.ProductService;
+import com.unicaes.poo.domain.products.ProductServiceImpl;
 import com.unicaes.poo.domain.products.dto.DtoUpdateProduct;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -22,7 +20,7 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    private ProductService productService;
+    private ProductServiceImpl productService;
 
     @PostMapping
     public ResponseEntity<DtoProductResponse> addProduct(@Valid @RequestBody DtoSaveProduct dto, UriComponentsBuilder uriBuilder) {

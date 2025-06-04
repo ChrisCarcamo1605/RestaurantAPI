@@ -1,7 +1,7 @@
 package com.unicaes.poo.controller;
 
 import com.unicaes.poo.domain.ingredient.dto.*;
-import com.unicaes.poo.domain.ingredient.interfaces.IIngredient;
+import com.unicaes.poo.interfaces.ingredient.IIngredient;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

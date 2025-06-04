@@ -1,6 +1,6 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.domain.products.interfaces.IProductService;
+import com.unicaes.poo.interfaces.products.ProductService;
 import com.unicaes.poo.domain.products.dto.DtoSaveType;
 import com.unicaes.poo.domain.products.dto.DtoTypeResponse;
 import com.unicaes.poo.domain.products.dto.DtoUpdateType;
@@ -18,7 +18,7 @@ import java.util.List;
 public class ProductTypeController {
 
     @Autowired
-    private IProductService productService;
+    private ProductService productService;
 
 
     @PostMapping

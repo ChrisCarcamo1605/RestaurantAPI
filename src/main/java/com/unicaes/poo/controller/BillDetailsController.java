@@ -1,6 +1,6 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.domain.bill.interfaces.IBillService;
+import com.unicaes.poo.interfaces.bill.IBillService;
 import com.unicaes.poo.domain.bill.dto.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;

@@ -1,6 +1,6 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.domain.bill.interfaces.IBillService;
+import com.unicaes.poo.interfaces.bill.IBillService;
 import com.unicaes.poo.domain.bill.dto.DtoBillList;
 import com.unicaes.poo.domain.bill.dto.DtoBillResponse;
 import com.unicaes.poo.domain.bill.dto.DtoBillSave;

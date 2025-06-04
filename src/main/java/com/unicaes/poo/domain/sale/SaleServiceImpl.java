@@ -4,6 +4,7 @@ import com.unicaes.poo.domain.sale.dto.DtoSaveSale;
 import com.unicaes.poo.domain.sale.dto.DtoUpdateSale;
 import com.unicaes.poo.domain.sale.dto.DtoSaleList;
 import com.unicaes.poo.infra.exceptions.QueryException;
+import com.unicaes.poo.repository.SaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

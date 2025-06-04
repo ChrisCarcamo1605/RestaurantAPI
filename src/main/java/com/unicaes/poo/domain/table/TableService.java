@@ -1,8 +1,8 @@
 package com.unicaes.poo.domain.table;
 
 import com.unicaes.poo.domain.table.dto.*;
-import com.unicaes.poo.domain.table.interfaces.ITableService;
-import com.unicaes.poo.domain.table.interfaces.TableRepository;
+import com.unicaes.poo.interfaces.table.ITableService;
+import com.unicaes.poo.repository.TableRepository;
 import com.unicaes.poo.infra.exceptions.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

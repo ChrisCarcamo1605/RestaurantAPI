@@ -1,6 +1,6 @@
 package com.unicaes.poo.controller;
 
-import com.unicaes.poo.domain.table.interfaces.ITableService;
+import com.unicaes.poo.interfaces.table.ITableService;
 import com.unicaes.poo.domain.table.dto.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
