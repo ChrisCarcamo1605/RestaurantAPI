@@ -6,7 +6,7 @@ import com.unicaes.poo.domain.reservation.dto.DtoReservationResponse;
 
 import java.util.List;
 
-public interface IReservation {
+public interface ReservationService {
 
     DtoReservationResponse saveReservation(DtoSaveReservation dtoSaveReservation);
 
